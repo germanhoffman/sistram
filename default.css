@@ -1,0 +1,94 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 23/08/2014, 21:05:35
+    Author     : german
+*/
+
+.column_number {
+    text-align: right;
+}
+
+.column_text_center {
+    text-align: center;
+}
+
+#login_user {
+    width: auto; 
+    height: auto; 
+    position: absolute; 
+    top: 0; 
+    right: 0; 
+    padding: 2px;
+    margin: 5px;
+    background-color: white;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 5px;
+    border: 1px solid gray;
+    color: gray;
+    font-family: "Varela Round", Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    font-weight: bold;
+    background: -moz-linear-gradient(white, lightgray);
+    background: -webkit-linear-gradient(white, lightgray);
+    background: -o-linear-gradient(white, lightgray); 
+    background:  linear-gradient(white, lightgray);
+}
+
+#dialog-form-fieldset,
+#ot-remito-form-fieldset {
+    font-family: sans-serif; 
+    font-size: 13px; 
+    margin-top: 5px; 
+    -webkit-border-radius: 5px; 
+    -moz-border-radius: 5px; 
+    border-radius: 5px;
+    padding-top: 20px;
+    padding-left: 10px;
+    border: 1px solid silver; 
+}
+
+#dialog-change-passwd-form {
+    font-family: sans-serif; 
+    font-size: 13px;
+    padding: 5px 5px 5px 5px;
+}
+
+#dialog-change-passwd-fieldset {
+    -webkit-border-radius: 5px; 
+    -moz-border-radius: 5px; 
+    border-radius: 5px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+#dialog-change-passwd-fieldset label {
+    float: left;
+    width: 25%;
+    margin-right: 0.5em;
+    padding-top: 0.2em;
+    text-align: right;
+    font-weight: bold;      
+}
+
+input:focus {
+    outline: none;
+}
+
+#div_fondo_header, #div_fondo_footer {
+    -webkit-border-radius: 5px; 
+    -moz-border-radius: 5px; 
+    border-radius: 5px;    
+}
+
+.ui-widget {
+    font-size: 75%;
+}
+
+p {
+	margin: 0px 0px 0px 0px;
+}
