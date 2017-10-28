@@ -297,21 +297,25 @@ function show_table_orden() {
                                     },
                                     nombre: {
                                         title: 'Repuesto',
-                                        width: '60%'
+                                        width: '35%'
+                                    },
+                                    marca: {
+                                    	title: 'Marca',
+                                    	width: '35%'
                                     },
                                     valor: {
                                         title: 'Costo',
-                                        width: '20%',
+                                        width: '10%',
                                         listClass: 'column_number'
                                     },
                                     cantidad: {
                                         title: 'Cantidad',
-                                        width: '10%',
+                                        width: '5%',
                                         listClass: 'column_number'
                                     },
                                     tipo: {
                                         title: 'Tipo',
-                                        width: '10%',
+                                        width: '15%',
                                         options: [{Value: '1', DisplayText: 'Alternativo'},
                                         	      {Value: '0', DisplayText: 'Original' },
                                         	      {Value: '2', DisplayText: 'Otro' }]
@@ -588,7 +592,17 @@ function show_table_orden() {
             	title: 'Factura',
             	width: '10%',
             	listClass: 'column_text_center',
-            	visibility: 'fixed'
+            	visibility: 'fixed',
+            	display: function(data) {
+            		if ($.trim(data.record.factura) === "" && 
+            				(parseInt(data.record.od_estado) === 104 || parseInt(data.record.od_estado) == 105)) {
+            			return "<div style='color: red; border-radius: 5px; " +
+            				"padding: 5px; border: 1px solid red; font-weight: bold;'>SIN<br>FACTURAR</div>";
+            		} 
+            		else {
+            			return data.record.factura;
+            		}
+            	}
             },
             observaciones: {
                 title:'Observaciones',

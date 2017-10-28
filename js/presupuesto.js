@@ -36,7 +36,7 @@ function print_repuestos(data_repuestos) {
 	        
 	        $('#tabla_repuestos').find('tr:last').before(
 	            '<tr class="c2"><td class="c27" colspan="1" rowspan="1" style="border-left-style: none;"><p class="c0" style="text-align: left; "><span class="c1" style="font-style: normal;" >' +
-	            data_repuestos.data[i].repuesto +
+	            data_repuestos.data[i].repuesto + '&nbsp;-&nbsp;Marca:&nbsp;' + data_repuestos.data[i].marca +
 	            '</span></p></td><td class="c4" colspan="1" rowspan="1" style="display: ' + subt_header_visible + ';"><p class="c0" style="text-align: right; "><span class="c1" style="font-style: normal;">' +
 	            costo_aux +
 	            '</span></p></td><td class="c4" colspan="1" rowspan="1"><p class="c0" style="text-align: right; "><span class="c1" style="font-style: normal;">' +

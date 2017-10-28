@@ -204,8 +204,8 @@ function add_data() {
                     $post_array["trabajo"], $post_array["tipo"], $post_array["cantidad"], $post_array["observaciones"]);
             break;
         case "orden_repuesto":
-            $stmnt = sprintf("select `fn_%s_insert`(%d, '%s', %15.2f, %15.2f, %d) as result", $table, 
-                    $post_array["orden"], $post_array["nombre"], $post_array["valor"], $post_array["cantidad"], $post_array["tipo"]);
+            $stmnt = sprintf("select `fn_%s_insert`(%d, '%s', '%s', %15.2f, %15.2f, %d) as result", $table, 
+            $post_array["orden"], $post_array["nombre"], $post_array["marca"], $post_array["valor"], $post_array["cantidad"], $post_array["tipo"]);
             break;
         case "usuario":
             $stmnt = sprintf("select `fn_%s_insert`('%s', '%s', '%s', %d, '%s') as result", $table, 
@@ -316,8 +316,8 @@ function edit_data() {
                     $post_array["trabajo"], $post_array["tipo"], $post_array["cantidad"], $post_array["observaciones"]);
             break;
         case "orden_repuesto":
-            $stmnt = sprintf("call `sp_%s_update`(%d, %d, '%s', %15.2f, %15.2f, %d)", $table, $post_array["id"],
-                    $post_array["orden"], $post_array["nombre"], $post_array["valor"], $post_array["cantidad"], $post_array["tipo"]);
+            $stmnt = sprintf("call `sp_%s_update`(%d, %d, '%s', '%s', %15.2f, %15.2f, %d)", $table, $post_array["id"],
+            $post_array["orden"], $post_array["nombre"], $post_array["marca"], $post_array["valor"], $post_array["cantidad"], $post_array["tipo"]);
             break;
         case "usuario":
             $clave = (trim($post_array["clave"]))?md5(trim($post_array["clave"])):"";
