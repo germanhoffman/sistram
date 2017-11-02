@@ -402,6 +402,7 @@ function show_table_orden() {
 
                         $img.click(function () {
                         	$("#ot-remito-div").data("orden_id", ordenData.record.id);
+                        	$("#ot-remito-div").data("orden_status", ordenData.record.od_estado);
                         	$("#ot-remito-div").dialog("option", "title", "Imprimir - Orden: " + ordenData.record.id);
                         	$("#ot-remito-div").dialog("open");
                             //preview_ot(ordenData.record.id);
@@ -2367,7 +2368,17 @@ function init_otr_dialog() {
 			Cancelar: function() {
 				$(this).dialog('close');
 			}
-		}
+		},
+        open: function(event, ui) {
+            orden_status = parseInt($.data(this, 'orden_status'));
+            if (orden_status === 104 || orden_status === 105) {
+            	$('#label_tipo_print_r').show();
+            }
+            else {
+            	$('input#ot').prop('checked', true);
+            	$('#label_tipo_print_r').hide();
+            }
+        }
 	});
 }
 

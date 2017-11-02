@@ -250,8 +250,8 @@ and open the template in the editor.
         	<form id="ot-remito-form">
 	        	<fieldset id="ot-remito-form-fieldset">
 	        		<legend>Elija la opci&oacute;n a imprimir:</legend>
-                    <label for="ot"><input id="ot" type="radio" name="tipo_print" value="1" checked="checked">Orden de trabajo (OT)</label><br>
-                    <label for="r"><input id="r" type="radio" name="tipo_print" value="2">Remito (R)</label>
+                    <label id="label_tipo_print_ot" for="ot"><input id="ot" type="radio" name="tipo_print" value="1" checked="checked">Orden de trabajo (OT)</label><br>
+                    <label id="label_tipo_print_r" for="r"><input id="r" type="radio" name="tipo_print" value="2">Remito (R)</label>
                     <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
                 </fieldset>
             </form>
