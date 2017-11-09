@@ -325,18 +325,34 @@ function print_data(presupuesto_data) {
         	}                       
         }
         else {
-            if (presupuesto_data.data[0].fecha_actualizado !== null) {
-                $('#numero_presupuesto').html('Presupuesto: ' + presupuesto_data.data[0].id + ' [ ' + 
-                            presupuesto_data.data[0].estado + ': ' +
-                            presupuesto_data.data[0].fecha_actualizado + ' ]<br>Orden: ' + 
-                            presupuesto_data.data[0].o_id + ' [ ' + presupuesto_data.data[0].fecha_alta_ot + ' ]');
-            }
-            else {
-                $('#numero_presupuesto').html('Presupuesto: ' + presupuesto_data.data[0].id + ' [ ' + 
-                            presupuesto_data.data[0].estado + ': ' +
-                            presupuesto_data.data[0].fecha_generado + ' ]<br>Orden: ' + 
-                            presupuesto_data.data[0].o_id + ' [ ' + presupuesto_data.data[0].fecha_alta_ot + ' ]');
-            }   
+        	if (is_ot === 2) {
+	            if (presupuesto_data.data[0].fecha_actualizado !== null) {
+	                $('#numero_presupuesto').html('Presupuesto: ' + presupuesto_data.data[0].id + ' [ ' + 
+	                            presupuesto_data.data[0].estado + ': ' +
+	                            presupuesto_data.data[0].fecha_actualizado + ' ]<br>Remito: ' + 
+	                            presupuesto_data.data[0].o_id + ' [ ' + presupuesto_data.data[0].fecha_alta_ot + ' ]');
+	            }
+	            else {
+	                $('#numero_presupuesto').html('Presupuesto: ' + presupuesto_data.data[0].id + ' [ ' + 
+	                            presupuesto_data.data[0].estado + ': ' +
+	                            presupuesto_data.data[0].fecha_generado + ' ]<br>Remito: ' + 
+	                            presupuesto_data.data[0].o_id + ' [ ' + presupuesto_data.data[0].fecha_alta_ot + ' ]');
+	            }   
+        	}
+        	else {
+	            if (presupuesto_data.data[0].fecha_actualizado !== null) {
+	                $('#numero_presupuesto').html('Presupuesto: ' + presupuesto_data.data[0].id + ' [ ' + 
+	                            presupuesto_data.data[0].estado + ': ' +
+	                            presupuesto_data.data[0].fecha_actualizado + ' ]<br>Orden: ' + 
+	                            presupuesto_data.data[0].o_id + ' [ ' + presupuesto_data.data[0].fecha_alta_ot + ' ]');
+	            }
+	            else {
+	                $('#numero_presupuesto').html('Presupuesto: ' + presupuesto_data.data[0].id + ' [ ' + 
+	                            presupuesto_data.data[0].estado + ': ' +
+	                            presupuesto_data.data[0].fecha_generado + ' ]<br>Orden: ' + 
+	                            presupuesto_data.data[0].o_id + ' [ ' + presupuesto_data.data[0].fecha_alta_ot + ' ]');
+	            }   
+        	}
         }
 
         $('#cliente').html(presupuesto_data.data[0].cliente_nombre);
@@ -355,6 +371,7 @@ function print_data(presupuesto_data) {
 
 function get_data(o_id, p_id) {
 
+	//alert('p_id ' + p_id);
     if (p_id > 0) {
         var data_obj = {
             action: 'data',
@@ -376,6 +393,7 @@ function get_data(o_id, p_id) {
         async: false, 
         success: 
             function(result) {
+        	    //alert(JSON.stringify(result));
                 var res = JSON.parse(result);
                 if (res.Result.toString() !== "ERROR") {
                     print_data(res.Result);

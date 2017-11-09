@@ -403,6 +403,7 @@ function show_table_orden() {
                         $img.click(function () {
                         	$("#ot-remito-div").data("orden_id", ordenData.record.id);
                         	$("#ot-remito-div").data("orden_status", ordenData.record.od_estado);
+                        	$("#ot-remito-div").data("orden_pid", ordenData.record.p_id);
                         	$("#ot-remito-div").dialog("option", "title", "Imprimir - Orden: " + ordenData.record.id);
                         	$("#ot-remito-div").dialog("open");
                             //preview_ot(ordenData.record.id);
@@ -2363,7 +2364,7 @@ function init_otr_dialog() {
 		buttons: {
 			Aceptar: function () {
 				$(this).dialog('close');
-				preview_ot($.data(this, 'orden_id'), $('input[name=tipo_print]:checked').val());
+				preview_ot($.data(this, 'orden_id'), $('input[name=tipo_print]:checked').val(), $.data(this, 'orden_pid'));
 			},
 			Cancelar: function() {
 				$(this).dialog('close');
@@ -2371,6 +2372,7 @@ function init_otr_dialog() {
 		},
         open: function(event, ui) {
             orden_status = parseInt($.data(this, 'orden_status'));
+            //alert('Presupuesto #' + $.data(this, 'orden_pid'));
             if (orden_status === 104 || orden_status === 105) {
             	$('#label_tipo_print_r').show();
             }
@@ -2696,13 +2698,13 @@ function preview_presupuesto(orden, costo, bonificacion) {
 
 }
 
-function preview_ot(orden, ot_tipo) {
+function preview_ot(orden, ot_tipo, presupuesto) {
     
 	// ot_tipo: 1-OT, 2-R
     $.ajax({
         type: "POST",
         url: "presupuesto_plantilla.php", 
-        data: {id: orden, ot: ot_tipo},
+        data: {id: orden, ot: ot_tipo, presupuesto: presupuesto},
         async: false, 
         success: 
             function(result) {
@@ -2712,6 +2714,7 @@ function preview_ot(orden, ot_tipo) {
                         $("<form method='post' action='presupuesto_plantilla.php' target='_blank'>" +
                             "<input type='hidden' name='id' value='" + orden + "' />" +
                             "<input type='hidden' name='ot' value='" +  ot_tipo + "' />" +
+                            "<input type='hidden' name='presupuesto' value='" +  presupuesto + "' />" +
                             "<input type='hidden' name='tipo' value='full' /></form>").appendTo('body').submit();
                     },
                     Cerrar: function() {
