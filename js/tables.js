@@ -2289,7 +2289,7 @@ function init_observaciones_gen() {
                 record: {
                     action: $.data(this, 'next_action_status'),
                     id: $.data(this, 'orden_data').id,
-                    observaciones: $("#observaciones-gen").val()
+                    st_observaciones: $("#observaciones-gen").val()
                 },
                 success: 
                     function(result) {
@@ -2302,7 +2302,7 @@ function init_observaciones_gen() {
                                 //cur_table_row.find('.jtable-child-table-container').jtable('reload');
                             }
                             
-                            alert("Orden #" + result.Record.id + " modificada!!!");
+                            //alert("Orden #" + result.Record.id + " modificada!!!");
                         }
                         else {
                             alert("Problemas al intentar modificar orden #" + result.Record.id + ". " + result.Message);                                                                

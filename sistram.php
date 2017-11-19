@@ -360,7 +360,7 @@ function iniciar_trabajos() {
     
     $result = FALSE;
     
-    $stmnt = sprintf("call `sp_orden_start-jobs`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["observaciones"],
+    $stmnt = sprintf("call `sp_orden_start-jobs`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["st_observaciones"],
             $_SESSION["login_user_id"]);
     $res = mysql_query($stmnt);
     if ($res) {
@@ -382,7 +382,7 @@ function finalizar_trabajos() {
     
     $result = FALSE;
     
-    $stmnt = sprintf("call `sp_orden_finish-jobs`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["observaciones"],
+    $stmnt = sprintf("call `sp_orden_finish-jobs`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["st_observaciones"],
             $_SESSION["login_user_id"]);
     $res = mysql_query($stmnt);
     if ($res) {
@@ -404,7 +404,7 @@ function cerrar_orden() {
     
     $result = FALSE;
     
-    $stmnt = sprintf("call `sp_orden_close`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["observaciones"],
+    $stmnt = sprintf("call `sp_orden_close`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["st_observaciones"],
             $_SESSION["login_user_id"]); 
     $res = mysql_query($stmnt);
     if ($res) {
@@ -426,7 +426,7 @@ function cancelar_orden() {
     
     $result = FALSE;
     
-    $stmnt = sprintf("call `sp_orden_cancel`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["observaciones"],
+    $stmnt = sprintf("call `sp_orden_cancel`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["st_observaciones"],
             $_SESSION["login_user_id"]);
     $res = mysql_query($stmnt);
     if ($res) {
@@ -448,7 +448,7 @@ function reabrir_orden() {
     
     $result = FALSE;
     
-    $stmnt = sprintf("call `sp_orden_reabrir`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["observaciones"],
+    $stmnt = sprintf("call `sp_orden_reabrir`(%d, '%s', %d, @estado)", $post_array["id"], $post_array["st_observaciones"],
         $_SESSION["login_user_id"]);
     $res = mysql_query($stmnt);
     if ($res) {

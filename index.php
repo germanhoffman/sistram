@@ -33,11 +33,21 @@ and open the template in the editor.
         
         if ($_SESSION["login_user_type"] != 4) {
             echo "<div id='orden_table' style='width: 100%; padding-left: 0px; padding-right: 0px;'>
-                    <div style=\"width: 95%; height: auto; display: block; padding: 5px;\">
-                        <form> 
-                            Buscar: <input type=\"search\" name=\"name\" id=\"filter_text_orden\" />
-                            <button type=\"submit\" id=\"ordenSearchButton\">Ir</button>
-                        </form>
+                    <div style='width: 95%; height: auto; padding: 5px;'>
+                        <div style='width: 40%; height: auto; display: inline-block; padding: 5px;'>
+                            <form> 
+                                Buscar: <input type=\"search\" name=\"name\" id=\"filter_text_orden\" />
+                                <button type=\"submit\" id=\"ordenSearchButton\">Ir</button>
+                            </form>
+                        </div>
+                        <div style='width: 40%; display: inline-block; padding: 5px; '>
+                            <table>
+                                <tr>
+                                    <td>Uno</td><td>Dos</td><td>Tres</td><td>Cuatro</td><td>Cinco</td>
+                                    <td>Seis</td><td>Siete</td><td>Ocho</td><td>Nueve</td><td>Diez</td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>";
         }
