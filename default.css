@@ -92,3 +92,51 @@ input:focus {
 p {
 	margin: 0px 0px 0px 0px;
 }
+
+.contadores-btn {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  margin: 1px;
+  padding: 10px;
+  overflow: hidden;
+  border: 2px solid rgba(140,140,140,1);
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  font: normal 11px/1 Verdana, Geneva, sans-serif;
+  color: rgba(255,255,255,1);
+  text-align: center;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  background: #0199d9;
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+  box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+  text-shadow: 2px 2px 1px rgba(0,0,0,0.2) ;
+  white-space: nowrap;
+}
+
+.contadores-sf-btn {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  margin: 2px;
+  padding: 10px;
+  overflow: hidden;
+  border: 2px solid rgba(255,0,0,1);
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  font: normal 11px/1 Verdana, Geneva, sans-serif;
+  color: rgba(255,0,0,1);
+  text-align: center;
+  -o-text-overflow: ellipsis;
+  text-overflow: ellipsis;
+  background: #ffffff;
+  -webkit-box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+  box-shadow: 1px 1px 1px 0 rgba(0,0,0,0.3) ;
+  text-shadow: 2px 2px 1px rgba(0,0,0,0.2) ;
+  white-space: nowrap;
+}
+
+.cdor_valor {
+	font: bold 12px Verdana, Geneva, sans-serif;
+}

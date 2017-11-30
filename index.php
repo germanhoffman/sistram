@@ -33,21 +33,29 @@ and open the template in the editor.
         
         if ($_SESSION["login_user_type"] != 4) {
             echo "<div id='orden_table' style='width: 100%; padding-left: 0px; padding-right: 0px;'>
-                    <div style='width: 95%; height: auto; padding: 5px;'>
-                        <div style='width: 40%; height: auto; display: inline-block; padding: 5px;'>
+                    <div style='height: auto; padding: 5px;'>
+                        <table style='width: 100%;'><tr><td style='width: 100%;'>
+                        <!--<div style='width: 40%; height: auto; display: inline-block; padding: 5px; vertical-align: middle;'>-->
                             <form> 
                                 Buscar: <input type=\"search\" name=\"name\" id=\"filter_text_orden\" />
                                 <button type=\"submit\" id=\"ordenSearchButton\">Ir</button>
                             </form>
-                        </div>
-                        <div style='width: 40%; display: inline-block; padding: 5px; '>
+                        <!--</div>-->
+                        </td>
+                        <td style='width: auto;'>
+                        <!--<div style='width: 45%; display: inline-block; padding: 5px; vertical-align: middle;'>-->
                             <table>
                                 <tr>
-                                    <td>Uno</td><td>Dos</td><td>Tres</td><td>Cuatro</td><td>Cinco</td>
-                                    <td>Seis</td><td>Siete</td><td>Ocho</td><td>Nueve</td><td>Diez</td>
+                                    <td><div class='contadores-btn'>PENDIENTES<br><span class='cdor_valor' id='nuevas_cdor'>0</span></div></td>
+                                    <td><div class='contadores-btn'>PRESUPUESTADAS<br><span class='cdor_valor' id='presupuestadas_cdor'>0</span></div></td>
+                                    <td><div class='contadores-btn'>APROBADAS<br><span class='cdor_valor' id='aprobadas_cdor'>0</span></div></td>
+                                    <td><div class='contadores-btn'>INICIADAS<br><span class='cdor_valor' id='iniciadas_cdor'>0</span></div></td>
+                                    <td><div class='contadores-btn'>TERMINADAS<br><span class='cdor_valor' id='terminadas_cdor'>0</span></div></td>
+                                    <td><div class='contadores-sf-btn'>SIN FACTURAR<br><span class='cdor_valor' id='sin_facturar_cdor'>0</span></div></td>
                                 </tr>
                             </table>
-                        </div>
+                        </td></tr></table>
+                        <!--</div>-->
                     </div>
                 </div>";
         }

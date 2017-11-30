@@ -2119,6 +2119,77 @@ function show_table_zona() {
     $('#zonaSearchButton').click();
 }
 
+function print_resumen_estados(estados) {
+	
+	var i = 0;
+	
+	if (estados !== null) {
+		/*for (i = 0; i < estados.length; i++) {
+			switch (estados[i].estado) {
+				case "100":
+				case "106":	
+					$("#nuevas_cdor").text(estados[i].total);
+					break;
+				case "101":
+					$("#presupuestadas_cdor").text(estados[i].total);
+					break;
+				case "102":
+					$("#aprobadas_cdor").text(estados[i].total);
+					break;
+				case "103":
+					$("#iniciadas_cdor").text(estados[i].total);
+					break;
+				case "104":
+					$("#terminadas_cdor").text(estados[i].total);
+					break;
+			}
+			 
+		}*/
+		$("#nuevas_cdor").text(estados.ord_nuevas);
+		$("#presupuestadas_cdor").text(estados.ord_presupuestadas);
+		$("#aprobadas_cdor").text(estados.ord_aprobadas);
+		$("#iniciadas_cdor").text(estados.ord_iniciadas);
+		$("#terminadas_cdor").text(estados.ord_terminadas);
+		$("#sin_facturar_cdor").text(estados.ord_sin_facturar);
+	}
+	else {
+		$('#nuevas_cdor').text('?');
+		$('#presupuestadas_cdor').text('?');
+		$('#aprobadas_cdor').text('?');
+		$('#iniciadas_cdor').text('?');
+		$('#terminadas_cdor').text('?');
+	}
+}
+
+function get_resumen_estados() {
+
+    var data_obj = {
+        action: 'resumen_estados'
+    };
+
+    $.ajax({ 
+        url: mainPage,
+        data: $.param(data_obj),
+        type: 'POST',
+        //async: false, 
+        success: 
+            function(result) {
+        	    
+                var res = JSON.parse(result);
+                if (res.Result.toString() !== "ERROR") {
+                    print_resumen_estados(res.Record);
+                }
+                else {
+                	print_resumen_estados();
+                }
+            },
+        error:
+            function(result) {
+        		print_resumen_estados();
+            }
+    }); 	
+}
+
 function show_tables() {
     
     var user_type = parseInt(session_data.login_user_type);
@@ -2146,6 +2217,8 @@ function show_tables() {
         show_table_estado();
         show_table_usuario();
     }
+    
+    setInterval(get_resumen_estados, 5000);
 }
 
 function init_change_passwd_dialog() {
@@ -2771,8 +2844,15 @@ var current_orden_id = -1;
 
 $(document).ready(function() {
     
-    $('#tabs').tabs();
-
+    $("#tabs").tabs();
+    
+    $("#nuevas_cdor").tooltip({
+        show: {
+          effect: "slideDown",
+          delay: 250
+        }
+    });
+    
     $.ajax({
        url: 'session.php?',
        async: false,
@@ -2804,7 +2884,7 @@ $(document).ready(function() {
             });
         }
     });
-
+    
     show_tables();
 });
 

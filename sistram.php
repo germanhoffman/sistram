@@ -489,6 +489,29 @@ function agregar_novedades() {
     return $result;
 }
 
+function get_resumen() {
+    
+    global $table, $list_start_pos, $list_size, $get_array, $post_array;
+    
+    $result  = array();
+    
+    $stmnt = "call `sp_resumen_estados_1`()";
+       
+    $res = mysql_query($stmnt);
+        
+    if (is_resource($res)) {
+            
+        $result = mysql_fetch_array($res);
+        
+        mysql_free_result($res);
+    }
+    else {
+        throw new Exception(sprintf("Problemas ejecutando consulta '%s' [\"%s\"]", $stmnt, mysql_error()));
+    }
+        
+    return $result;    
+}
+
 // Main ------------------------------------------------------------------------
 require 'auth.php';
 
@@ -593,6 +616,13 @@ try {
                         $result["Result"] = "OK";
                         $result["Record"] = [];
                     }
+                    break;
+                case "resumen_estados":
+                    if ($r = get_resumen()) {
+                        $result["Result"] = "OK";
+                        $result["Record"] = $r;
+                    }
+                    break;
             }
         }
         else {
