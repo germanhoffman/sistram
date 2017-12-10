@@ -8,7 +8,7 @@
 
 function do_session_start() {
     
-    $post_array = filter_input_array(INPUT_POST);
+    global $post_array;
     
     if (!isset($post_array["user"]) || !isset($post_array["password"])) { return FALSE; }
 
@@ -24,12 +24,16 @@ function do_session_start() {
                 $row = $res->fetch_assoc();
                 $res->free();
 
+                ini_set("session.gc_maxlifetime", SISTRAM_TIMEOUT);
+                session_start();
+                
                 $_SESSION['name']            = "sistram";
                 $_SESSION['login_user']      = $row["usuario"];
                 $_SESSION['login_user_id']   = $row["id"];
                 $_SESSION['login_user_desc'] = $row["descripcion"];
                 $_SESSION['login_user_type'] = $row["tipo"];
-                $_SESSION["last_activity"]   = time();
+                $_SESSION["created"]         = time();
+                $_SESSION["last_activity"]   = $_SESSION["created"];
 
                 return isset($row["id"]);
 
@@ -51,8 +55,15 @@ function do_session_start() {
 function check_session_started() {
         
     $user = $_SESSION["login_user"];
+    $last_activity = $_SESSION["last_activity"];
     
-    if (!isset($user)) { return FALSE; }
+    if (!isset($user) || !isset($last_activity) || (time() - $last_activity) > SISTRAM_TIMEOUT) { 
+        
+        session_unset();
+        session_destroy();
+        
+        return FALSE; 
+    }
     
     $cnx = new mysqli(DB_SERVER, DB_USER, DB_PASSWD, "", DB_SERVER_PORT);
     if (!$cnx->connect_error) {
@@ -89,11 +100,14 @@ function check_session_active() {
 
 require 'common.php';
 
+$post_array = filter_input_array(INPUT_POST);
+
 $url_dest_txt = "";
 try {
     session_start();
 
     if (!check_session_started()) {
+                
         if (!do_session_start()) {
             if (basename($_SERVER["PHP_SELF"]) == "login.php") {
                 $url_dest_txt = "";
@@ -106,8 +120,20 @@ try {
             $url_dest_txt = "Location: index.php"; 
         }
     }
-    elseif (basename($_SERVER["PHP_SELF"]) == "login.php") {
-        $url_dest_txt = "Location: index.php"; 
+    else {
+        
+        if (!$post_array["no_activity"]) {
+            $_SESSION["last_activity"] = time();
+            
+            if ((time() - $_SESSION['created']) > RECREATE_SESSION) {
+                session_regenerate_id(true);
+                $_SESSION['created'] = $_SESSION["last_activity"];
+            }
+        }
+        
+        if (basename($_SERVER["PHP_SELF"]) == "login.php") {                        
+            $url_dest_txt = "Location: index.php";
+        }
     }
 }
 catch (Exception $ex) {

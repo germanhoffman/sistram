@@ -107,9 +107,9 @@ input {
 	-moz-border-radius: 0 0 20px 20px;
 	border-radius: 0 0 20px 20px;
 	padding: 20px 26px;
-        -webkit-box-shadow:inset 0px 0px 0px 4px #E0E0D1;
-        -moz-box-shadow:inset 0px 0px 0px 4px #E0E0D1;
-        box-shadow:inset 0px 0px 0px 4px #E0E0D1;
+    -webkit-box-shadow:inset 0px 0px 0px 4px #E0E0D1;
+    -moz-box-shadow:inset 0px 0px 0px 4px #E0E0D1;
+    box-shadow:inset 0px 0px 0px 4px #E0E0D1;
 }
 
 #login fieldset p {

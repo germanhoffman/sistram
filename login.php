@@ -19,7 +19,7 @@ require 'auth.php';
         <form action="" method="POST">
 		<fieldset>
                     <p><label for="user">Usuario</label></p>
-                    <p><input type="text" id="user" name="user" value="usuario" onBlur="if(this.value=='')this.value='usuario'" onFocus="if(this.value=='usuario')this.value=''"></p>
+                    <p><input type="text" id="user" name="user" value="usuario" onBlur="if(this.value=='')this.value='usuario'" onFocus="if(this.value=='usuario')this.value=''" autofocus></p>
                     <p><label for="password">Clave</label></p>
                     <p><input type="password" id="password" name="password" value="clave" onBlur="if(this.value=='')this.value='clave'" onFocus="if(this.value=='clave')this.value=''"></p>
 

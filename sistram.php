@@ -130,6 +130,9 @@ function get_list_range() {
         $stmnt = sprintf("call `sp_%s_select-range`(%d, %d, '%s', %d, '%s', @cant)", $table, $list_start_pos, $list_size, 
             $filter_field, $filter_value, $filter_text);
     }
+    
+    //echo ($stmnt);
+    
     $res = mysql_query($stmnt);
 
     if (is_resource($res)) {

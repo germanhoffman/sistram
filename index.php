@@ -35,12 +35,15 @@ and open the template in the editor.
             echo "<div id='orden_table' style='width: 100%; padding-left: 0px; padding-right: 0px;'>
                     <div style='height: auto; padding: 5px;'>
                         <table style='width: 100%;'><tr><td style='width: 100%;'>
-                        <!--<div style='width: 40%; height: auto; display: inline-block; padding: 5px; vertical-align: middle;'>-->
-                            <form> 
-                                Buscar: <input type=\"search\" name=\"name\" id=\"filter_text_orden\" />
-                                <button type=\"submit\" id=\"ordenSearchButton\">Ir</button>
+                            <form>
+                              <div class='row'><div class='col-lg-8'>
+                                <div class='input-group'>
+                                    <span class='input-group-addon' id='basic-addon1'>Buscar:</span>
+                                    <input type=\"text\" name=\"name\" id=\"filter_text_orden\" class='form-control' placeholder='ej: <taller>,<cliente>,presupuestada' />
+                                    <input type='submit' id=\"ordenSearchButton\" class='btn btn-primary' value='Actualizar' />
+                                </div>    
+                              </div></div>
                             </form>
-                        <!--</div>-->
                         </td>
                         <td style='width: auto;'>
                         <!--<div style='width: 45%; display: inline-block; padding: 5px; vertical-align: middle;'>-->
@@ -63,8 +66,13 @@ and open the template in the editor.
         echo "<div id=\"novedad_table\" style='width: 100%; padding-left: 0px; padding-right: 0px;'>
                 <div style=\"width: 95%; height: auto; display: block; padding: 5px;\">
                     <form> 
-                        Buscar: <input type=\"search\" name=\"name\" id=\"filter_text_novedad\" />
-                        <button type=\"submit\" id=\"novedadSearchButton\">Ir</button>
+                      <div class='row'><div class='col-lg-6'>
+                        <div class='input-group'>
+                            <span class='input-group-addon' id='basic-addon1'>Buscar:</span>
+                            <input type=\"text\" name=\"name\" id=\"filter_text_novedad\" class='form-control' placeholder='ej: <texto>' />
+                            <input type=\"submit\" id=\"novedadSearchButton\" class='btn btn-primary' value='Actualizar' />
+                        </div>    
+                      </div></div>
                     </form>
                 </div>                            
             </div>";
@@ -74,8 +82,13 @@ and open the template in the editor.
             echo "<div id=\"cliente_table\" style='width: 100%; padding-left: 0px; padding-right: 0px;'>
                     <div style=\"width: 95%; height: auto; display: block; padding: 5px;\">
                         <form> 
-                            Buscar: <input type=\"search\" name=\"name\" id=\"filter_text_cliente\" />
-                            <button type=\"submit\" id=\"clienteSearchButton\">Ir</button>
+                          <div class='row'><div class='col-lg-6'>
+                            <div class='input-group'>
+                                <span class='input-group-addon' id='basic-addon1'>Buscar:</span>
+                                <input type=\"text\" name=\"name\" id=\"filter_text_cliente\" class='form-control' placeholder='ej: <texto>' />
+                                <input type=\"submit\" id=\"clienteSearchButton\" class='btn btn-primary' value='Actualizar' />
+                            </div>    
+                          </div></div>
                         </form>
                     </div>                            
                 </div>";
@@ -83,8 +96,13 @@ and open the template in the editor.
             echo "<div id=\"taller_table\" style='width: 100%; padding-left: 0px; padding-right: 0px;'>
                     <div style=\"width: 95%; height: auto; display: block; padding: 5px;\">
                         <form> 
-                            Buscar: <input type=\"search\" name=\"name\" id=\"filter_text_taller\" />
-                            <button type=\"submit\" id=\"tallerSearchButton\">Ir</button>
+                          <div class='row'><div class='col-lg-6'>
+                            <div class='input-group'>
+                                <span class='input-group-addon' id='basic-addon1'>Buscar:</span>
+                                <input type=\"text\" name=\"name\" id=\"filter_text_taller\" class='form-control' placeholder='ej: <texto>' />
+                                <input type=\"submit\" id=\"tallerSearchButton\" class='btn btn-primary' value='Actualizar' />
+                            </div>    
+                          </div></div>
                         </form>
                     </div>                            
                 </div>";
@@ -92,8 +110,13 @@ and open the template in the editor.
             echo "<div id=\"vehiculo_table\" style='width: 100%; padding-left: 0px; padding-right: 0px;'>
                     <div style=\"width: 95%; height: auto; display: block; padding: 5px;\">
                         <form> 
-                            Buscar: <input type=\"search\" name=\"name\" id=\"filter_text_vehiculo\" />
-                            <button type=\"submit\" id=\"vehiculoSearchButton\">Ir</button>
+                          <div class='row'><div class='col-lg-6'>
+                            <div class='input-group'>
+                                <span class='input-group-addon' id='basic-addon1'>Buscar:</span>
+                                <input type=\"text\" name=\"name\" id=\"filter_text_vehiculo\" class='form-control' placeholder='ej: <texto>' />
+                                <input type=\"submit\" id=\"vehiculoSearchButton\" class='btn btn-primary' value='Actualizar' />
+                            </div>    
+                          </div></div>
                         </form>
                     </div>
                 </div>";
@@ -101,8 +124,13 @@ and open the template in the editor.
             echo "<div id=\"zona_table\" style='width: 100%; padding-left: 0px; padding-right: 0px;'>
                     <div style=\"width: 95%; height: auto; display: block; padding: 5px;\">
                         <form> 
-                            Buscar: <input type=\"search\" name=\"name\" id=\"filter_text_zona\" />
-                            <button type=\"submit\" id=\"zonaSearchButton\">Ir</button>
+                          <div class='row'><div class='col-lg-6'>
+                            <div class='input-group'>
+                                <span class='input-group-addon' id='basic-addon1'>Buscar:</span>
+                                <input type=\"text\" name=\"name\" id=\"filter_text_zona\" class='form-control' placeholder='ej: <texto>' />
+                                <input type=\"submit\" id=\"zonaSearchButton\" class='btn btn-primary' value='Actualizar' />
+                            </div>    
+                          </div></div>
                         </form>
                     </div>
                 </div>";
@@ -110,16 +138,26 @@ and open the template in the editor.
             echo '<div id="modelo_table" style="width: 100%; padding-left: 0px; padding-right: 0px;">
                     <div style="width: 95%; height: auto; display: block; padding: 5px;">
                         <form> 
-                            Buscar: <input type="search" name="name" id="filter_text_modelo" />
-                            <button type="submit" id="modeloSearchButton">Ir</button>
+                          <div class="row"><div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">Buscar:</span>
+                                <input type="text" name="name" id="filter_text_modelo" class="form-control" placeholder="ej: <texto>" />
+                                <input type="submit" id="modeloSearchButton" class="btn btn-primary" value="Actualizar" />
+                            </div>    
+                          </div></div>
                         </form>
                     </div>
                 </div>'.
                 '<div id="marca_table" style="width: 100%; padding-left: 0px; padding-right: 0px;">
                     <div style="width: 95%; height: auto; display: block; padding: 5px;">
                         <form> 
-                            Buscar: <input type="search" name="name" id="filter_text_marca" />
-                            <button type="submit" id="marcaSearchButton">Ir</button>
+                          <div class="row"><div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">Buscar:</span>
+                                <input type="text" name="name" id="filter_text_marca" class="form-control" placeholder="ej: <texto>" />
+                                <input type="submit" id="marcaSearchButton" class="btn btn-primary" value="Actualizar" />
+                            </div>    
+                          </div></div>
                         </form>
                     </div>
                 </div>';
@@ -127,16 +165,26 @@ and open the template in the editor.
             echo '<div id="estado_table" style="width: 100%; padding-left: 0px; padding-right: 0px;">
                     <div style="width: 95%; height: auto; display: block; padding: 5px;">
                         <form> 
-                            Buscar: <input type="search" name="name" id="filter_text_estado" />
-                            <button type="submit" id="estadoSearchButton">Ir</button>
+                          <div class="row"><div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">Buscar:</span>
+                                <input type="text" name="name" id="filter_text_estado" class="form-control" placeholder="ej: <texto>" />
+                                <input type="submit" id="estadoSearchButton" class="btn btn-primary" value="Actualizar" />
+                            </div>    
+                          </div></div>
                         </form>
                     </div>
                 </div>'.
                  '<div id="usuario_table" style="width: 100%; padding-left: 0px; padding-right: 0px;">
                     <div style="width: 95%; height: auto; display: block; padding: 5px;">
                         <form> 
-                            Buscar: <input type="search" name="name" id="filter_text_usuario" />
-                            <button type="submit" id="usuarioSearchButton">Ir</button>
+                          <div class="row"><div class="col-lg-6">
+                            <div class="input-group">
+                                <span class="input-group-addon" id="basic-addon1">Buscar:</span>
+                                <input type="text" name="name" id="filter_text_usuario" class="form-control" placeholder="ej: <texto>" />
+                                <input type="submit" id="usuarioSearchButton" class="btn btn-primary" value="Actualizar" />
+                            </div>    
+                          </div></div>
                         </form>
                     </div>
                 </div>';   
@@ -156,6 +204,7 @@ and open the template in the editor.
         <link href="//code.jquery.com/ui/1.11.4/themes/redmond/jquery-ui.css" rel="stylesheet" type="text/css" />
         <link href="jtable.2.5.0/themes/jqueryui/jtable_jqueryui.css" rel="stylesheet" type="text/css" />
         <link href="default.css" rel="stylesheet" type="text/css" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous">
         <link rel="icon" href="images/icon_sistram.png" type="image/png" sizes="32x32" />
 
         <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>

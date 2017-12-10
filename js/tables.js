@@ -194,22 +194,17 @@ function show_table_orden() {
                                         type: 'hidden',
                                         defaultValue: ordenData.record.id
                                     },
-                                    /*fecha: {
-                                        title: 'Fecha',
-                                        width: '20%',
-                                        listClass: 'column_text_center',
-                                        edit: false,
-                                        create: false
-                                    },*/
                                     trabajo: {
                                         title: 'Tarea',
                                         width: '40%',
-                                        type: 'textarea'
+                                        type: 'textarea',
+                                        inputClass: 'glowing-border'
                                     },
                                     tipo: {
                                         title: 'Tipo',
                                         width: '10%',
-                                        options: mainPage + '?action=options&table=trabajo'
+                                        options: mainPage + '?action=options&table=trabajo',
+                                        inputClass: 'glowing-border'
                                     },
                                     costo1: {
                                     	title: 'Costo',
@@ -217,7 +212,8 @@ function show_table_orden() {
                                     	type: (user_type === 3)?'text':'hidden',
                                     	edit: false,
                                     	create: false,
-                                    	listClass: 'column_number'
+                                    	listClass: 'column_number',
+                                    	inputClass: 'glowing-border'
                                     },
                                     costo2: {
                                     	title: 'Costo',
@@ -225,17 +221,20 @@ function show_table_orden() {
                                     	type: (user_type === 2)?'text':'hidden',
                                     	edit: false,
                                     	create: false,
-                                    	listClass: 'column_number'
+                                    	listClass: 'column_number',
+                                    	inputClass: 'glowing-border'
                                     },
                                     cantidad: {
                                         title: 'Cantidad',
                                         width: '10%',
-                                        listClass: 'column_number'
+                                        listClass: 'column_number',
+                                        inputClass: 'glowing-border'
                                     },
                                     observaciones: {
                                         title: 'Observaciones',
                                         width: '30%',
-                                        type: 'textarea'
+                                        type: 'textarea',
+                                        inputClass: 'glowing-border'
                                     }
                                 },
                                 recordAdded: get_total_orden,
@@ -297,28 +296,33 @@ function show_table_orden() {
                                     },
                                     nombre: {
                                         title: 'Repuesto',
-                                        width: '35%'
+                                        width: '35%',
+                                        inputClass: 'glowing-border'
                                     },
                                     marca: {
                                     	title: 'Marca',
-                                    	width: '35%'
+                                    	width: '35%',
+                                    	inputClass: 'glowing-border'
                                     },
                                     valor: {
                                         title: 'Costo',
                                         width: '10%',
-                                        listClass: 'column_number'
+                                        listClass: 'column_number',
+                                        inputClass: 'glowing-border'
                                     },
                                     cantidad: {
                                         title: 'Cantidad',
                                         width: '5%',
-                                        listClass: 'column_number'
+                                        listClass: 'column_number',
+                                        inputClass: 'glowing-border'
                                     },
                                     tipo: {
                                         title: 'Tipo',
                                         width: '15%',
                                         options: [{Value: '1', DisplayText: 'Alternativo'},
                                         	      {Value: '0', DisplayText: 'Original' },
-                                        	      {Value: '2', DisplayText: 'Otro' }]
+                                        	      {Value: '2', DisplayText: 'Otro' }],
+                                        inputClass: 'glowing-border'
                                     }
                                 },
                                 recordAdded: get_total_orden,
@@ -502,19 +506,22 @@ function show_table_orden() {
                 title: 'Taller',
                 width: '20%',
                 options: mainPage + '?action=options&table=taller',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             cliente: {
                 title: 'Cliente',
                 width: '20%',
                 options: mainPage + '?action=options&table=cliente',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             zona: {
                 title: 'Zona',
                 width: '20%',
                 visibility: 'fixed',
                 dependsOn: ['taller','cliente'],
+                inputClass: 'glowing-border',
                 options: function (data) {
                     if (data.source === 'list') {
                         return mainPage + '?action=options&table=zona&filter_field[0]=cliente&filter_field[1]=taller&cliente=0&taller=0';
@@ -530,6 +537,7 @@ function show_table_orden() {
                 width: '20%',
                 visibility: 'fixed',
                 dependsOn: 'cliente',
+                inputClass: 'glowing-border',
                 options: function (data) {
                     if (data.source === 'list') {
                         return mainPage + '?action=options&table=vehiculo&filter_field=cliente&cliente=0';
@@ -544,34 +552,22 @@ function show_table_orden() {
                 title: 'Odometro',
                 width: '10%',
                 visibility: 'fixed',
-                listClass: 'column_number'
+                listClass: 'column_number',
+                inputClass: 'glowing-border'
             },
             interno: {
                 title: 'Interno',
                 width: '10%',
                 visibility: 'fixed',
-                listClass: 'column_number'                
+                listClass: 'column_number',
+                inputClass: 'glowing-border'
             },
             referencia: {
                 title: 'Referencia',
                 width: '10%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
-            /*novedades: {
-                title: 'Novedades',
-                width: '20%',
-                type: 'textarea',
-                visibility: 'fixed'
-            },*/
-            /*estado: {
-                title: 'Estado',
-                width: '10%',
-                options: mainPage + '?action=options&table=estado',
-                create: false,
-                edit: false,
-                listClass: 'column_text_center',
-                visibility: 'fixed'
-            },*/
             od_estado: {
                 title: 'Estado',
                 width: '10%',
@@ -595,6 +591,7 @@ function show_table_orden() {
             	width: '10%',
             	listClass: 'column_text_center',
             	visibility: 'fixed',
+            	inputClass: 'glowing-border',
             	display: function(data) {
             		if ($.trim(data.record.factura) === "" && 
             				(parseInt(data.record.od_estado) === 104 || parseInt(data.record.od_estado) == 105)) {
@@ -611,13 +608,15 @@ function show_table_orden() {
                 list: true,
                 edit: true,
                 name: 'observaciones',
-                type: 'textarea'
+                type: 'textarea',
+                inputClass: 'glowing-border'
             },
             costo_total: {
             	title: 'Costo',
             	width: '10%',
             	visibility: 'fixed',
-            	listClass: 'column_number'            		
+            	listClass: 'column_number',
+            	inputClass: 'glowing-border'
             },
             total_orden: {
             	create: false,
@@ -1108,7 +1107,8 @@ function show_table_novedad() {
                 title: 'Cliente',
                 width: '20%',
                 options: mainPage + '?action=options&table=cliente',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             vehiculo: {
                 title: 'Veh&iacute;culo',
@@ -1124,18 +1124,21 @@ function show_table_novedad() {
                                 data.dependedValues.cliente_id;
                     }
                 },
-                listClass: 'column_text_center'
+                listClass: 'column_text_center',
+                inputClass: 'glowing-border'
             },
             odometro: {
                 title: 'Od&oacute;metro',
                 width: '20%',
                 listClass: 'column_number',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             descripcion: {
                 title: 'Novedad',
                 width: '30%',
-                visibility: 'fixed'                
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             usuario_id: {
                 title: 'Usuario',
@@ -1143,7 +1146,8 @@ function show_table_novedad() {
                 visibility: 'fixed',
                 edit: false,
                 create: false,
-                options: mainPage + '?action=options&table=usuario&filter_field=tipo&tipo=\'\''
+                options: mainPage + '?action=options&table=usuario&filter_field=tipo&tipo=\'\'',
+                inputClass: 'glowing-border'
             },
             orden: {
                 title: 'Orden',
@@ -1157,7 +1161,8 @@ function show_table_novedad() {
                 title: 'Observaciones',
                 width: '40%',
                 visibility: 'fixed',
-                type: 'textarea'
+                type: 'textarea',
+                inputClass: 'glowing-border'
             }
         }
     });
@@ -1276,43 +1281,51 @@ function show_table_taller() {
             nombre: {
                 title: 'Nombre',
                 width: '10%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             direccion: {
                 title: 'Dirección',
                 width: '25%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             localidad: {
                 title: 'Localidad',
                 width: '10%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             provincia: {
                 title: 'Provincia',
                 width: '10%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             cpa: {
                 title:'CP',
                 width: '5%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             telefono: {
                 title: 'Teléfono',
                 width: '10%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             cuit: {
                 title:'CUIT',
                 width: '5%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             descripcion: {
                 title: 'Comentarios',
                 width: '25%',
                 type: 'textarea',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             usuario: {
                 title: '',
@@ -1359,6 +1372,7 @@ function show_table_taller() {
                                     title: 'Usuario',
                                     width: '25%',
                                     visibility: 'fixed',
+                                    inputClass: 'glowing-border',
                                     options: function (data) {
                                         if (data.source === 'list') {
                                             return mainPage + '?action=options&table=usuario&filter_field=tipo&tipo=0'
@@ -1456,43 +1470,51 @@ function show_table_cliente() {
             nombre: {
                 title: 'Nombre',
                 width: '10%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             direccion: {
                 title: 'Dirección',
                 width: '25%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             localidad: {
                 title: 'Localidad',
                 width: '15%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             provincia: {
                 title: 'Provincia',
                 width: '10%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             telefono: {
                 title: 'Teléfono',
                 width: '10%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             cpa: {
                 title:'CP',
                 width: '5%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             cuit: {
                 title:'CUIT',
                 width: '5%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             descripcion: {
                 title: 'Comentarios',
                 width: '20%',
                 type: 'textarea',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             usuario: {
                 title: '',
@@ -1533,6 +1555,7 @@ function show_table_cliente() {
                                     title: 'Usuario',
                                     width: '25%',
                                     visibility: 'fixed',
+                                    inputClass: 'glowing-border',
                                     options: function (data) {
                                         if (data.source === 'list') {
                                             return mainPage + '?action=options&table=usuario&filter_field=tipo&tipo=\'\''
@@ -1637,19 +1660,22 @@ function show_table_vehiculo() {
                 title: 'Cliente',
                 width: '20%',
                 options: mainPage + '?action=options&table=cliente',                
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             marca: {
                 title: 'Marca',
                 width: '10%',
                 options: mainPage + '?action=options&table=marca',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             modelo: {
                 title: 'Modelo',
                 width: '10%',
                 dependsOn: 'marca',
                 visibility: 'fixed',
+                inputClass: 'glowing-border',
                 options: function (data) {
                     if (data.source === 'list') {
                         return mainPage + '?action=options&table=modelo&filter_field=marca&marca=0';
@@ -1664,25 +1690,29 @@ function show_table_vehiculo() {
                 title: 'Dominio',
                 width: '10%',
                 visibility: 'fixed',
-                listClass: 'column_text_center'
+                listClass: 'column_text_center',
+                inputClass: 'glowing-border'
             },
             motor: {
                 title: 'No. Motor',
                 width: '20%',
                 visibility: 'fixed',
-                listClass: 'column_text_center'
+                listClass: 'column_text_center',
+                inputClass: 'glowing-border'
             },
             chasis: {
                 title:'No. Chasis',
                 width: '20%',
                 visibility: 'fixed',
-                listClass: 'column_text_center'
+                listClass: 'column_text_center',
+                inputClass: 'glowing-border'
             },
             anio: {
                 title:'Año',
                 width: '10%',
                 visibility: 'fixed',
-                listClass: 'column_number'
+                listClass: 'column_number',
+                inputClass: 'glowing-border'
             },
             fecha_alta: {
                 title: 'Alta',
@@ -1746,7 +1776,8 @@ function show_table_marca() {
             marca: {
                 title: 'Marca',
                 width: '100%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             }
         }
     });
@@ -1793,12 +1824,14 @@ function show_table_modelo() {
                 title: 'Marca',
                 width: '45%',
                 options: mainPage + '?action=options&table=marca',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             modelo: {
                 title: 'Modelo',
                 width: '55%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             }
         }
     });
@@ -1845,7 +1878,8 @@ function show_table_estado() {
             descripcion: {
                 title: 'Estado',
                 width: '100%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             }
         }
     });
@@ -1893,16 +1927,19 @@ function show_table_usuario() {
             usuario: {
                 title: 'Usuario',
                 width: '20%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             descripcion: {
                 title: 'Descripci&oacute;n',
                 width: '30%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             clave: {
                 list: false,
                 title: 'Constrase&ntilde;a',
+                inputClass: 'glowing-border',
                 input: function (data) {
                     return '<input type="text" name="clave" style="width: 140px" value="" />';
                 }
@@ -1910,13 +1947,15 @@ function show_table_usuario() {
             mail: {
                 title: 'Correo',
                 width: '30%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             tipo: {
                 title: 'Tipo',
                 options: { 1: 'Cliente', 2: 'Taller', 3: 'Administrador', 4: 'Cliente (Carga Novedades)' },
                 width: '20%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             }
         }
     });
@@ -1962,25 +2001,29 @@ function show_table_zona() {
             nombre: {
                 title: 'Nombre',
                 width: '70%',
-                visibility: 'fixed'
+                visibility: 'fixed',
+                inputClass: 'glowing-border'
             },
             desc_1: {
                 title: 'Desc Original',
                 width: '20%',
                 visibility: 'fixed',
-                listClass: 'column_number'
+                listClass: 'column_number',
+                inputClass: 'glowing-border'
             },
             desc_2: {
                 title: 'Des Alternativo',
                 width: '20%',
                 visibility: 'fixed',
-                listClass: 'column_number'
+                listClass: 'column_number',
+                inputClass: 'glowing-border'
             },
             desc_3: {
                 title: 'Otro',
                 width: '20%',
                 visibility: 'fixed',
-                listClass: 'column_number'
+                listClass: 'column_number',
+                inputClass: 'glowing-border'
             },
             zt: {
                 title: '',
@@ -2023,19 +2066,22 @@ function show_table_zona() {
                                     title: 'Tarea',
                                     width: '70%',
                                     options: mainPage + '?action=options&table=trabajo',
-                                    visibility: 'fixed'
+                                    visibility: 'fixed',
+                                    inputClass: 'glowing-border'
                                 },
                                 costo1: {
                                     title: 'Costo',
                                     width: '15%',
                                     visibility: 'fixed',
-                                    listClass: 'column_number'
+                                    listClass: 'column_number',
+                                    inputClass: 'glowing-border'
                                 },
                                 costo2: {
                                     title: 'Costo taller',
                                     width: '15%',
                                     visibility: 'fixed',
-                                    listClass: 'column_number'
+                                    listClass: 'column_number',
+                                    inputClass: 'glowing-border'
                                 }
                             }
                         }, function (data) { //opened handler
@@ -2088,13 +2134,15 @@ function show_table_zona() {
                                     title: 'Cliente',
                                     width: '50%',
                                     options: mainPage + '?action=options&table=cliente',
-                                    visibility: 'fixed'
+                                    visibility: 'fixed',
+                                    inputClass: 'glowing-border'
                                 },
                                 taller: {
                                     title: 'Taller',
                                     width: '50%',
                                     options: mainPage + '?action=options&table=taller',
-                                    visibility: 'fixed'
+                                    visibility: 'fixed',
+                                    inputClass: 'glowing-border'
                                 }
                             }
                         }, function (data) { //opened handler
@@ -2164,7 +2212,8 @@ function print_resumen_estados(estados) {
 function get_resumen_estados() {
 
     var data_obj = {
-        action: 'resumen_estados'
+        action: 'resumen_estados',
+        no_activity: true
     };
 
     $.ajax({ 
@@ -2812,7 +2861,7 @@ function preview_ot(orden, ot_tipo, presupuesto) {
 // Main ========================================================================
 
 var spanishMessages = {
-    serverCommunicationError: 'Ocurrió un error en la comunicación con el servidor.', 
+    serverCommunicationError: 'Ocurri&oacute; un error en la comunicaci&oacute;n con el servidor. Puede que la sesi&oacute;n haya expirado.<br>Intente iniciar sesi&oacute;n nuevamente', 
     loadingMessage: 'Cargando...', 
     noDataAvailable: 'No hay datos disponibles!', 
     addNewRecord: 'Agregar', 
@@ -2886,5 +2935,6 @@ $(document).ready(function() {
     });
     
     show_tables();
+    
 });
 
