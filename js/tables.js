@@ -58,9 +58,9 @@ function show_table_orden() {
         openChildAsAccordion: true,
         actions: {
             listAction: mainPage + '?action=list&table=orden',
-            createAction: (user_type === 3)?mainPage + '?action=create&table=orden':null,
-            updateAction: (user_type === 3)?mainPage + '?action=update&table=orden':null,
-            deleteAction: (user_type === 3)?mainPage + '?action=delete&table=orden':null
+            createAction: (user_type === 2 || user_type === 3)?mainPage + '?action=create&table=orden':null,
+            updateAction: (user_type === 2 || user_type === 3)?mainPage + '?action=update&table=orden':null,
+            deleteAction: (user_type === 2 || user_type === 3)?mainPage + '?action=delete&table=orden':null
         },
         fields: {
             novedad: {
@@ -502,6 +502,31 @@ function show_table_orden() {
             			"</span><br><span style='white-space: nowrap;'>" + data.record.hora + "</span></div>";
             	}            	
             },
+            vehiculo: {
+                title: 'Vehiculo',
+                width: '20%',
+                visibility: 'fixed',
+                //dependsOn: 'cliente',
+                inputClass: 'glowing-border',
+                options: mainPage + '?action=options&table=vehiculo&filter_field=cliente&cliente=0'
+            },
+            cliente: {
+                title: 'Cliente',
+                width: '20%',
+                //options: mainPage + '?action=options&table=cliente',
+                visibility: 'fixed',
+                inputClass: 'glowing-border',
+                dependsOn: 'vehiculo',
+                options: function(data) {
+                    if (data.source === 'list') {
+                        return mainPage + '?action=options&table=cliente&filter_field=vehiculo&vehiculo=0';
+                    }
+                    else {
+                        return mainPage + '?action=options&table=cliente&filter_field=vehiculo&vehiculo=' +
+                                data.dependedValues.vehiculo;
+                    }
+                }
+            },
             taller: {
                 title: 'Taller',
                 width: '20%',
@@ -509,17 +534,13 @@ function show_table_orden() {
                 visibility: 'fixed',
                 inputClass: 'glowing-border'
             },
-            cliente: {
-                title: 'Cliente',
-                width: '20%',
-                options: mainPage + '?action=options&table=cliente',
-                visibility: 'fixed',
-                inputClass: 'glowing-border'
-            },
             zona: {
                 title: 'Zona',
                 width: '20%',
                 visibility: 'fixed',
+                create: (user_type === 3)?true:false,
+                edit: (user_type === 3)?true:false,
+                list: (user_type === 3)?true:false,
                 dependsOn: ['taller','cliente'],
                 inputClass: 'glowing-border',
                 options: function (data) {
@@ -527,12 +548,13 @@ function show_table_orden() {
                         return mainPage + '?action=options&table=zona&filter_field[0]=cliente&filter_field[1]=taller&cliente=0&taller=0';
                     }
                     else {
+ 
                         return mainPage + '?action=options&table=zona&filter_field[0]=cliente&filter_field[1]=taller&cliente=' + 
                                 data.dependedValues.cliente + '&taller=' + data.dependedValues.taller;
                     }
                 }
             },
-            vehiculo: {
+            /*vehiculo: {
                 title: 'Vehiculo',
                 width: '20%',
                 visibility: 'fixed',
@@ -547,7 +569,7 @@ function show_table_orden() {
                                 data.dependedValues.cliente;
                     }
                 }
-            },
+            },*/
             odometro: {
                 title: 'Odometro',
                 width: '10%',
@@ -592,6 +614,9 @@ function show_table_orden() {
             	listClass: 'column_text_center',
             	visibility: 'fixed',
             	inputClass: 'glowing-border',
+                create: (user_type === 3)?true:false,
+                edit: (user_type === 3)?true:false,
+                list: (user_type === 3)?true:false,                
             	display: function(data) {
             		if ($.trim(data.record.factura) === "" && 
             				(parseInt(data.record.od_estado) === 104 || parseInt(data.record.od_estado) == 105)) {
@@ -1106,7 +1131,7 @@ function show_table_novedad() {
             cliente_id: {
                 title: 'Cliente',
                 width: '20%',
-                options: mainPage + '?action=options&table=cliente',
+                options: mainPage + '?action=options&table=cliente&filter_field=vehiculo&vehiculo=0',
                 visibility: 'fixed',
                 inputClass: 'glowing-border'
             },
@@ -1659,7 +1684,7 @@ function show_table_vehiculo() {
             cliente: {
                 title: 'Cliente',
                 width: '20%',
-                options: mainPage + '?action=options&table=cliente',                
+                options: mainPage + '?action=options&table=cliente&filter_field=vehiculo&vehiculo=0',                
                 visibility: 'fixed',
                 inputClass: 'glowing-border'
             },
@@ -2133,7 +2158,7 @@ function show_table_zona() {
                                 cliente: {
                                     title: 'Cliente',
                                     width: '50%',
-                                    options: mainPage + '?action=options&table=cliente',
+                                    options: mainPage + '?action=options&table=cliente&filter_field=vehiculo&vehiculo=0',
                                     visibility: 'fixed',
                                     inputClass: 'glowing-border'
                                 },
@@ -2607,7 +2632,7 @@ function init_novedades_dialog() {
             cliente_id: {
                 title: 'Cliente',
                 width: '20%',
-                options: mainPage + '?action=options&table=cliente',
+                options: mainPage + '?action=options&table=cliente&filter_field=vehiculo&vehiculo=0',
                 visibility: 'fixed'
             },
             vehiculo: {
