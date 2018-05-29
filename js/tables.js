@@ -58,9 +58,9 @@ function show_table_orden() {
         openChildAsAccordion: true,
         actions: {
             listAction: mainPage + '?action=list&table=orden',
-            createAction: (user_type === 2 || user_type === 3)?mainPage + '?action=create&table=orden':null,
-            updateAction: (user_type === 2 || user_type === 3)?mainPage + '?action=update&table=orden':null,
-            deleteAction: (user_type === 2 || user_type === 3)?mainPage + '?action=delete&table=orden':null
+            createAction: (user_type === 3)?mainPage + '?action=create&table=orden':null,
+            updateAction: (user_type === 3)?mainPage + '?action=update&table=orden':null,
+            deleteAction: (user_type === 3)?mainPage + '?action=delete&table=orden':null
         },
         fields: {
             novedad: {
