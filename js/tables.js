@@ -6,7 +6,7 @@
 
 Number.prototype.round = function (places) {
 	return +(Math.round(this + "e+" + places)  + "e-" + places);
-}
+};
 
 var get_total_orden = function(event, data) {
 	
@@ -33,16 +33,55 @@ var get_total_orden = function(event, data) {
 	});
     
 	if (result != -1) {
-        $("#orden_table").jtable('updateRecord', {
+            $("#orden_table").jtable('updateRecord', {
         	clientOnly: true,
         	animationsEnabled: false,
         	record: {
         		id: orden_id,
         		total_orden: result
         	}
-        });
+            });
 	}	
 }
+
+var get_total_presupuesto = function(event, data) {
+	
+	var user_type = parseInt(session_data.login_user_type);
+	var result = -1;
+	var presupuesto_id;
+        var orden_id;
+	
+	if ($.isArray(data.record)) {
+            presupuesto_id = data.record[0].presupuesto;
+            orden_id = data.record[0].id;
+        }
+	else {
+            presupuesto_id = data.record.presupuesto;
+            orden_id = data.record.id;
+	}
+	
+	$.ajax({
+		async: false,
+		type: "POST",
+		url: "presupuesto.php",
+		data: {action: 'total_presupuesto', id: presupuesto_id, tipo_costo: (user_type === 2)?2:1},
+		success: function(data) {
+			result = data.Result.total_presupuesto;
+		},
+		dataType: 'json'
+	});
+    
+	/*if (result != -1) {
+            $("#orden_table").jtable('updateRecord', {
+        	clientOnly: true,
+        	animationsEnabled: false,
+        	record: {
+        		id: orden_id,
+        		total_ultimo_presupuesto: result
+        	}
+            });
+	}*/
+};
 
 function show_table_orden() {
     
@@ -238,8 +277,8 @@ function show_table_orden() {
                                     }
                                 },
                                 recordAdded: get_total_orden,
-                        		recordUpdated: get_total_orden,
-                        		recordDeleted: get_total_orden,
+                        	recordUpdated: get_total_orden,
+                        	recordDeleted: get_total_orden,
                             }, function (data) { //opened handler
                                 data.childTable.jtable('load');
                             });
@@ -326,8 +365,8 @@ function show_table_orden() {
                                     }
                                 },
                                 recordAdded: get_total_orden,
-                        		recordUpdated: get_total_orden,
-                        		recordDeleted: get_total_orden,                                
+                        	recordUpdated: get_total_orden,
+                        	recordDeleted: get_total_orden,                                
                             }, function (data) { //opened handler
                                 data.childTable.jtable('load');
                             });
@@ -643,10 +682,18 @@ function show_table_orden() {
             	listClass: 'column_number',
             	inputClass: 'glowing-border'
             },
-            total_orden: {
+            /*total_orden: {
             	create: false,
             	edit: false,            	
             	title: 'Total',
+            	width: '10%',
+            	visibility: 'fixed',
+            	listClass: 'column_number'
+            },*/
+            total_ultimo_presupuesto: {
+            	create: false,
+            	edit: false,            	
+            	title: 'TUP',
             	width: '10%',
             	visibility: 'fixed',
             	listClass: 'column_number'
@@ -662,10 +709,12 @@ function show_table_orden() {
             		
             		var result = 0; 
             		
-                  	if (ordenData.record.total_orden > 0 && ordenData.record.costo_total > 0) {
-                  		result = (ordenData.record.total_orden - ordenData.record.costo_total)*100/ordenData.record.costo_total;
+                  	if (ordenData.record.total_ultimo_presupuesto > 0 && ordenData.record.costo_total > 0) {
+                  		result = (ordenData.record.total_ultimo_presupuesto - ordenData.record.costo_total)*100/ordenData.record.costo_total;
                 	}
-                  	
+                  	/*if (ordenData.record.total_orden > 0 && ordenData.record.costo_total > 0) {
+                  		result = (ordenData.record.total_orden - ordenData.record.costo_total)*100/ordenData.record.costo_total;
+                	}*/
                   	var back_color = "lime";
                   	var text_color = "black";
                   	if (result <= 3) {
@@ -1071,6 +1120,9 @@ function show_table_orden() {
                 }
             }            
         }
+        //recordAdded: get_total_presupuesto,
+        //recordUpdated: get_total_presupuesto,
+        //recordDeleted: get_total_presupuesto
     });
     
     //Re-load records when user click 'load records' button.
@@ -2366,6 +2418,9 @@ function init_presupuesto_dialog() {
 
 function init_observaciones_dialog() {
     
+    var presup_id = -1;
+    var orden_id = -1;
+    var user_type = parseInt(session_data.login_user_type);
     // Dialogo para cargar observaciones en la generacion del presupuesto.-
     $( "#observaciones-presupuesto-div" ).dialog({
         autoOpen: false,
@@ -2374,13 +2429,16 @@ function init_observaciones_dialog() {
         modal: true,
         title: 'Observaciones',
         buttons: {
-            Aceptar: function () {            
+            Aceptar: function () {        
+                
+                orden_id = $.data(this, 'orden_id');
                 var rec_ex = {
                     action: 'presupuesto_save',
                     pobservaciones: $('#observaciones-presupuesto').val(),
-                    id: $.data(this, 'orden_id'),
+                    id: orden_id,
                     costo: (parseInt(session_data.login_user_type) === 2)?2:1,
                     bonificacion: 0
+                    //total_ultimo_presupuesto: 0
                 };
                 
                 $('#orden_table').jtable('updateRecord', {
@@ -2390,9 +2448,10 @@ function init_observaciones_dialog() {
                         function(res) {
                             //var res = JSON.parse(result);
                             if (res.Result !== "ERROR") {
+                                presup_id = res.Record.presupuesto;
                                 $('#observaciones-presupuesto-div').dialog( "close" );
                                 $('#preview-presupuesto-div').dialog("close");
-                                alert("Presupuesto #" + res.Record.presupuesto + " generado para aprobacion!!!");
+                                alert("Presupuesto #" + presup_id + " generado para aprobacion!!!");
                                 
                             }
                             else {
@@ -2403,9 +2462,7 @@ function init_observaciones_dialog() {
                         function(result) {
                             alert("Error guardando presupuesto. " + result.statusText);
                         }
-                });
-                
-                
+                });                                             
             },
             Cancelar: function() {
               $(this).dialog( "close" );
@@ -2415,6 +2472,29 @@ function init_observaciones_dialog() {
             $(this).dialog('option', 'title', 'Orden #' + $.data(this, 'orden_id') + ' - Presupuesto observaciones');
         },
         close: function (event, ui) {
+            
+            $.ajax({
+                    async: false,
+                    type: "POST",
+                    url: "presupuesto.php",
+                    data: {action: 'total_presupuesto', id: presup_id, tipo_costo: (user_type === 2)?2:1},
+                    success: function(data) {
+                            res_presup = data.Result.total_presupuesto;
+                    },
+                    dataType: 'json'
+            });
+
+            if (res_presup != -1) {
+                $("#orden_table").jtable('updateRecord', {
+                    clientOnly: true,
+                    animationsEnabled: false,
+                    record: {
+                            id: orden_id,
+                            total_ultimo_presupuesto: res_presup
+                    }
+                });
+            }
+                
             $(this).dialog('option', 'title', 'Observaciones');
             $('#observaciones-presupuesto').val('');
         }        
@@ -2857,8 +2937,9 @@ function preview_ot(orden, ot_tipo, presupuesto) {
             function(result) {
 
                 var buttons = {
-                    Imprimir: function() {   
-                        $("<form method='post' action='presupuesto_plantilla.php' target='_blank'>" +
+                    Imprimir: function() {
+                        var modif = Math.floor(Math.random() * 100) + 1;
+                        $("<form method='post' action='presupuesto_plantilla.php?rand=" + modif + "' target='_blank'>" +
                             "<input type='hidden' name='id' value='" + orden + "' />" +
                             "<input type='hidden' name='ot' value='" +  ot_tipo + "' />" +
                             "<input type='hidden' name='presupuesto' value='" +  presupuesto + "' />" +

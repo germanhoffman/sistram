@@ -240,6 +240,27 @@ function get_total_orden($orden, $tipo_costo) {
     return $result;  
 }
 
+function get_total_presupuesto($presupuesto) {
+    
+    global $cnx;
+    
+    $result = -1;
+    
+    $stmnt = sprintf("select ifnull(`fn_presupuesto_total_repuestos`(%d), 0) + 
+		ifnull(`fn_presupuesto_total_mano_obra`(%d), 0) as result", $presupuesto, $presupuesto);
+    $res = $cnx->query($stmnt);
+    if ($res) {
+        $row = $res->fetch_assoc();
+        $result = $row["result"];       
+        $res->free();
+    }
+    else {
+        throw new Exception(sprintf("Problemas ejecutando consulta '%s' [\"%s\"]", $stmnt, mysql_error()));
+    }
+    
+    return $result;  
+}
+
 // Main ========================================================================
 require 'auth.php';
 
@@ -299,6 +320,9 @@ try {
                     break;
                 case "total_orden":
                     $result["Result"]["total_orden"] = get_total_orden($input_params["id"], $input_params["tipo_costo"]);
+                    break;
+                case "total_presupuesto":
+                    $result["Result"]["total_presupuesto"] = get_total_presupuesto($input_params["id"]);
                     break;
             }
         }
