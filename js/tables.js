@@ -682,21 +682,48 @@ function show_table_orden() {
             	listClass: 'column_number',
             	inputClass: 'glowing-border'
             },
-            /*total_orden: {
+            total: {
             	create: false,
             	edit: false,            	
             	title: 'Total',
             	width: '10%',
             	visibility: 'fixed',
-            	listClass: 'column_number'
-            },*/
+            	//listClass: 'column_number',
+            	display: function (ordenData) {
+                    var _to = 0;
+                    var _tup = 0;
+                    
+                    if (ordenData.record.total_ultimo_presupuesto > 0) {
+                        _tup = ordenData.record.total_ultimo_presupuesto;
+                    }
+                    
+                    if (ordenData.record.total_orden > 0) {
+                        _to = ordenData.record.total_orden;
+                    }
+            	
+                    return "<div style='font-weight: bold; display: inline-block; white-space: nowrap; border-radius: 3px; padding: 3px; border: 2px solid white; '>TO:&nbsp;" + 
+                            _to + "</div><br>" +
+                            "<div style='font-weight: bold; display: inline-block; white-space: nowrap; border-radius: 3px; padding: 3px; border: 2px solid white; '>TUP:&nbsp;" + 
+                            _tup + "</div>";
+            	}
+            },
+            total_orden: {
+            	create: false,
+            	edit: false,            	
+            	title: 'TO',
+            	width: '10%',
+            	visibility: 'fixed',
+            	listClass: 'column_number',
+                type: 'hidden'
+            },
             total_ultimo_presupuesto: {
             	create: false,
             	edit: false,            	
             	title: 'TUP',
             	width: '10%',
             	visibility: 'fixed',
-            	listClass: 'column_number'
+            	listClass: 'column_number',
+                type: 'hidden'
             },
             indice_ganancia: {
             	create: false,
@@ -704,30 +731,46 @@ function show_table_orden() {
             	title: '&Iacute;ndice',
             	width: '10%',
             	visibility: 'fixed',
-            	listClass: 'column_number',
+            	//listClass: 'column_number',
             	display: function (ordenData) {
             		
-            		var result = 0; 
-            		
+            		var result_to = 0; 
+                        var result_tup = 0;
+                                    		
                   	if (ordenData.record.total_ultimo_presupuesto > 0 && ordenData.record.costo_total > 0) {
-                  		result = (ordenData.record.total_ultimo_presupuesto - ordenData.record.costo_total)*100/ordenData.record.costo_total;
+                  		result_tup = (ordenData.record.total_ultimo_presupuesto - ordenData.record.costo_total)*100/ordenData.record.costo_total;
                 	}
-                  	/*if (ordenData.record.total_orden > 0 && ordenData.record.costo_total > 0) {
-                  		result = (ordenData.record.total_orden - ordenData.record.costo_total)*100/ordenData.record.costo_total;
-                	}*/
-                  	var back_color = "lime";
-                  	var text_color = "black";
-                  	if (result <= 3) {
-              			back_color = "red";
-              			text_color = "white";                  		
+                  	
+                        if (ordenData.record.total_orden > 0 && ordenData.record.costo_total > 0) {
+                  		result_to = (ordenData.record.total_orden - ordenData.record.costo_total)*100/ordenData.record.costo_total;
+                	}
+                        
+                  	var back_color_to = "lime";
+                  	var text_color_to = "black";
+                  	var back_color_tup = "lime";
+                  	var text_color_tup = "black";
+                  	if (result_to <= 3) {
+              			back_color_to = "red";
+              			text_color_to = "white";                  		
                   	} 
-                  	else if (result > 3 && result <= 15) {
-              			back_color = "yellow";
-              			text_color = "black";                  		
+                  	else if (result_to > 3 && result_to <= 15) {
+              			back_color_to = "yellow";
+              			text_color_to = "black";                  		
+                  	}
+                        
+                  	if (result_tup <= 3) {
+              			back_color_tup = "red";
+              			text_color_tup = "white";                  		
+                  	} 
+                  	else if (result_tup > 3 && result_tup <= 15) {
+              			back_color_tup = "yellow";
+              			text_color_tup = "black";                  		
                   	}
             		            		
-            		return "<div style='border-radius: 5px; color: " + text_color + " ; background-color: " + back_color + "; padding: 5px; '>" + 
-            			result.round(0) + "%</div>";
+            		return "<div style='font-weight: bold; display: inline-block; white-space: nowrap; border-radius: 5px; color: " + text_color_to + " ; background-color: " + 
+                                back_color_to + "; padding: 3px; border: 2px solid white; '>TO:&nbsp;" + result_to.round(0) + "%</div><br>" + 
+                               "<div style='font-weight: bold; display: inline-block; white-space: nowrap; border-radius: 5px; color: " + text_color_tup + " ; background-color: " + 
+                                back_color_tup + "; padding: 3px; border: 2px solid white; '>TUP:&nbsp;" + result_tup.round(0) + "%</div>";
             	}
             },
             pobservaciones: {

@@ -1,146 +1,93 @@
-# WARNING: Objects in server1.sistramc_data but not in server1.sistramc_data_orig:
-#    PROCEDURE: sp_resumen_estados
-
-DROP PROCEDURE IF EXISTS `sp_resumen_estados`;
-DELIMITER $$
-CREATE PROCEDURE `sp_resumen_estados`()
-BEGIN
-select d.nestado as estado, count(d.nestado) as total from (
-select 
-    case 
-		when (od.estado = 104 and (o.factura is null or trim(o.factura) = "")) then 1004
-	else
-		od.estado
-	end as nestado	
-from orden o
-join orden_detalle od on o.id = od.orden 
-    and od.id = (select max(od1.id) from orden_detalle od1 where od1.orden = o.id)
-) d
-group by d.nestado
-order by 2 desc;
-END$$
-DELIMITER ;
-
-#    PROCEDURE: sp_test_temp_table
-DROP PROCEDURE IF EXISTS `sp_test_temp_table`;
-DELIMITER $$
-CREATE  PROCEDURE `sp_test_temp_table`(
-	in ar varchar(400)
-)
-BEGIN
-  declare pos int;           -- Keeping track of the next item's position
-  declare item varchar(100); -- A single item of the input
-  declare breaker int;       -- Safeguard for while loop 
-
-  -- The string must end with the delimiter
-  if right(ar, 1) <> '.' then
-     set ar = concat(ar, ',');
-  end if;
-
-  DROP TABLE IF EXISTS tbl_search_tmp;
-  CREATE TEMPORARY TABLE tbl_search_tmp ( search varchar(100) );
-  set breaker = 0;
-
-  while (breaker < 2000) && (length(ar) > 1) do
-     -- Iterate looking for the delimiter, add rows to temporary table.
-     set breaker = breaker + 1;
-     set pos = INSTR(ar, ',');
-     set item = LEFT(ar, pos - 1);
-     set ar = substring(ar, pos + 1);
-     insert into tbl_search_tmp values(item);
-  end while;
-  
-  select * from tbl_search_tmp;
-  
-  drop table tbl_search_tmp;
-  
-END$$
-DELIMITER ;
-
-#    PROCEDURE: sp_resumen_estados_1
-
-DROP PROCEDURE IF EXISTS `sp_resumen_estados_1`;
-DELIMITER $$
-CREATE  PROCEDURE `sp_resumen_estados_1`()
-BEGIN
-
-	declare v_finished int;
-    
-    declare v_estado int;
-    declare v_total int;
-
-	declare ord_nuevas int;
-    declare ord_reabiertas int;
-    declare ord_pendientes int;
-    declare ord_presupuestadas int;
-    declare ord_aprobadas int;
-    declare ord_iniciadas int;
-    declare ord_terminadas int;
-    declare ord_facturadas int;
-    declare ord_sin_facturar int;
-    
-    declare estados_cursor cursor for
-
-		(select d.nestado as estado, count(d.nestado) as total from (
-		select 
-			if (od.estado = 104, if (o.factura is null or trim(o.factura) = "", 1004, 2004), od.estado) as nestado
-		from orden o
-		join orden_detalle od on o.id = od.orden 
-			and od.id = (select max(od1.id) from orden_detalle od1 where od1.orden = o.id)
-		) d
-		group by d.nestado
-		order by 2 desc);
-        
-	declare continue handler
-		for not found set v_finished = 1;
-        
-	open estados_cursor;
-    
-    get_estado: loop
-	
-    fetch estados_cursor into v_estado, v_total;
-    
-    if v_finished = 1 then
-    leave get_estado;
-    end if;
-    
-    case v_estado
-		when 100 then set ord_nuevas = v_total;
-        when 101 then set ord_presupuestadas = v_total;
-        when 102 then set ord_aprobadas = v_total;
-        when 103 then set ord_iniciadas = v_total;
-        when 106 then set ord_reabiertas = v_total;
-        when 1004 then set ord_sin_facturar = v_total;
-        when 2004 then set ord_facturadas = v_total;
-	else begin end;
-	end case; 
-    
-    set ord_pendientes = ord_nuevas + ord_reabiertas;
-    set ord_terminadas = ord_facturadas + ord_sin_facturar;
-    
-    -- set ord_pendientes = v_estado;
-    -- set ord_facturadas = v_total;
-    
-    end loop get_estado;
-    
-    close estados_cursor;
-    
-    select 
-		ord_nuevas, ord_reabiertas, ord_pendientes,
-        ord_presupuestadas, ord_aprobadas, ord_iniciadas,
-        ord_terminadas, ord_facturadas, ord_sin_facturar;
-    
-END$$
-DELIMITER ;
-
-
+# server1 on localhost: ... connected.
+# Comparing `sistramc_data_orig` to `sistramc_data`                [PASS]
+# Comparing `sistramc_data_orig`.`fn_cliente_insert` to `sistramc_data`.`fn_cliente_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_estado_insert` to `sistramc_data`.`fn_estado_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_marca_insert` to `sistramc_data`.`fn_marca_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_modelo_count` to `sistramc_data`.`fn_modelo_count`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_modelo_insert` to `sistramc_data`.`fn_modelo_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_novedad_insert` to `sistramc_data`.`fn_novedad_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_orden_count` to `sistramc_data`.`fn_orden_count`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_orden_count_ex` to `sistramc_data`.`fn_orden_count_ex`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_orden_detalle_count` to `sistramc_data`.`fn_orden_detalle_count`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_orden_insert` to `sistramc_data`.`fn_orden_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_orden_repuesto_insert` to `sistramc_data`.`fn_orden_repuesto_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_orden_total_mano_obra` to `sistramc_data`.`fn_orden_total_mano_obra`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_orden_total_repuestos` to `sistramc_data`.`fn_orden_total_repuestos`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_orden_trabajo_insert` to `sistramc_data`.`fn_orden_trabajo_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_presupuesto_insert` to `sistramc_data`.`fn_presupuesto_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_presupuesto_total_mano_obra` to `sistramc_data`.`fn_presupuesto_total_mano_obra`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_presupuesto_total_repuestos` to `sistramc_data`.`fn_presupuesto_total_repuestos`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_taller_count` to `sistramc_data`.`fn_taller_count`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_taller_insert` to `sistramc_data`.`fn_taller_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_usuario_cliente_insert` to `sistramc_data`.`fn_usuario_cliente_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_usuario_insert` to `sistramc_data`.`fn_usuario_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_usuario_taller_insert` to `sistramc_data`.`fn_usuario_taller_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_vehiculo_insert` to `sistramc_data`.`fn_vehiculo_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_zona_cliente_taller_insert` to `sistramc_data`.`fn_zona_cliente_taller_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_zona_insert` to `sistramc_data`.`fn_zona_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`fn_zona_trabajo_insert` to `sistramc_data`.`fn_zona_trabajo_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_cliente_baja` to `sistramc_data`.`sp_cliente_baja`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_cliente_delete` to `sistramc_data`.`sp_cliente_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_cliente_insert` to `sistramc_data`.`sp_cliente_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_cliente_select` to `sistramc_data`.`sp_cliente_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_cliente_select-list` to `sistramc_data`.`sp_cliente_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_cliente_select-range` to `sistramc_data`.`sp_cliente_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_cliente_update` to `sistramc_data`.`sp_cliente_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_estado_delete` to `sistramc_data`.`sp_estado_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_estado_insert` to `sistramc_data`.`sp_estado_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_estado_select` to `sistramc_data`.`sp_estado_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_estado_select-list` to `sistramc_data`.`sp_estado_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_estado_select-range` to `sistramc_data`.`sp_estado_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_estado_update` to `sistramc_data`.`sp_estado_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_marca_delete` to `sistramc_data`.`sp_marca_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_marca_insert` to `sistramc_data`.`sp_marca_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_marca_select` to `sistramc_data`.`sp_marca_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_marca_select-list` to `sistramc_data`.`sp_marca_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_marca_select-range` to `sistramc_data`.`sp_marca_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_marca_update` to `sistramc_data`.`sp_marca_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_modelo_delete` to `sistramc_data`.`sp_modelo_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_modelo_insert` to `sistramc_data`.`sp_modelo_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_modelo_select` to `sistramc_data`.`sp_modelo_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_modelo_select-list` to `sistramc_data`.`sp_modelo_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_modelo_select-range` to `sistramc_data`.`sp_modelo_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_modelo_update` to `sistramc_data`.`sp_modelo_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_novedad_delete` to `sistramc_data`.`sp_novedad_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_novedad_insert` to `sistramc_data`.`sp_novedad_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_novedad_print` to `sistramc_data`.`sp_novedad_print`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_novedad_select` to `sistramc_data`.`sp_novedad_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_novedad_select-list` to `sistramc_data`.`sp_novedad_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_novedad_select-range` to `sistramc_data`.`sp_novedad_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_novedad_update` to `sistramc_data`.`sp_novedad_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_cancel` to `sistramc_data`.`sp_orden_cancel`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_close` to `sistramc_data`.`sp_orden_close`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_delete` to `sistramc_data`.`sp_orden_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_detalle_insert` to `sistramc_data`.`sp_orden_detalle_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_detalle_select-list` to `sistramc_data`.`sp_orden_detalle_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_detalle_select-range` to `sistramc_data`.`sp_orden_detalle_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_finish-jobs` to `sistramc_data`.`sp_orden_finish-jobs`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_insert` to `sistramc_data`.`sp_orden_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_novedad_delete` to `sistramc_data`.`sp_orden_novedad_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_novedad_insert` to `sistramc_data`.`sp_orden_novedad_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_novedad_select` to `sistramc_data`.`sp_orden_novedad_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_novedad_select-list` to `sistramc_data`.`sp_orden_novedad_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_novedad_select-range` to `sistramc_data`.`sp_orden_novedad_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_novedad_update` to `sistramc_data`.`sp_orden_novedad_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_presupuesto-nok` to `sistramc_data`.`sp_orden_presupuesto-nok`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_presupuesto-ok` to `sistramc_data`.`sp_orden_presupuesto-ok`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_reabrir` to `sistramc_data`.`sp_orden_reabrir`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_repuesto_delete` to `sistramc_data`.`sp_orden_repuesto_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_repuesto_insert` to `sistramc_data`.`sp_orden_repuesto_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_repuesto_select` to `sistramc_data`.`sp_orden_repuesto_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_repuesto_select-range` to `sistramc_data`.`sp_orden_repuesto_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_repuesto_update` to `sistramc_data`.`sp_orden_repuesto_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_select` to `sistramc_data`.`sp_orden_select`   [PASS]
 # Comparing `sistramc_data_orig`.`sp_orden_select-range` to `sistramc_data`.`sp_orden_select-range`   [FAIL]
 # Transformation for --changes-for=server1:
 #
 
-DROP PROCEDURE IF EXISTS `sp_orden_select-range`;
+DROP PROCEDURE IF EXISTS `sistramc_data_orig`.`sp_orden_select-range`;
 DELIMITER //
-CREATE PROCEDURE `sp_orden_select-range` (
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sistramc_data_orig`.`sp_orden_select-range` (
 	in p_startpos int, 
 	in p_count int,
 	in p_filter_field varchar(50),
@@ -184,7 +131,7 @@ CREATE PROCEDURE `sp_orden_select-range` (
 		set @stmnt = replace(replace("\n\t\t\tselect \n\t\t\t\tcount(*) into @q \n\t\t\tfrom \n\t\t\t\torden o\n            join \n\t\t\t\tvehiculo v on v.id = o.vehiculo \n\t\t\tjoin \n\t\t\t\tcliente c on c.id = o.cliente\n\t\t\tjoin \n\t\t\t\ttaller t on t.id = o.taller\n\t\t\tjoin \n\t\t\t\tmarca m on m.id = v.marca\n\t\t\tjoin \n\t\t\t\tmodelo d on d.id = v.modelo\n\t\t\tjoin \n\t\t\t\tzona z on z.id = o.zona\n\t\t\tleft outer join \n\t\t\t\tvw_orden_detalle od1 on od1.orden = o.id and od1.estado = 100\n\t\t\tleft outer join \n\t\t\t\tvw_orden_detalle od on od.orden = o.id and od.id = ($stmnt_od$)\n\t\t\tleft outer join \n\t\t\t\tvw_presupuesto p on p.orden = o.id and p.id = ($stmnt_p$)\n\t\t\tleft outer join \n\t\t\t\testado e on e.id = od.estado", 
 			"$stmnt_p$", @stmnt_p), "$stmnt_od$", @stmnt_od);
 	else
-		set @stmnt = replace(replace("\n\t\t\tselect \n\t\t\t\to.*, \n                m.marca as orden_marca, \n                d.modelo as orden_modelo, \n                t.nombre as orden_taller,\n                e.descripcion as orden_estado, \n                c.nombre as orden_cliente,\n                v.dominio as orden_dominio,\n                od.id as od_id,\n                od.estado as od_estado,\n                case p.estado\n\t\t\t\t\twhen 1 then concat(p.id, ' - Pendiente')\n                    when 2 then concat(p.id, ' - Aprobado')\n                    when 3 then concat(p.id, ' - Rechazado')\n\t\t\t\telse \n\t\t\t\t\t'Indefinido'\n\t\t\t\tend as presupuesto,\n                p.id as p_id,\n                p.p_tipo,\n                cast(od1.fecha as date) as fecha,\n                cast(od1.fecha as time) as hora,\n                ifnull(`fn_orden_total_repuestos`(o.id), 0) + \n\t\t\t\t\tifnull(`fn_orden_total_mano_obra`(o.id, if(@user_type = 2,2,1)), 0) as total_orden\n\t\t\tfrom \n\t\t\t\torden o\n\t\t\tjoin \n\t\t\t\tvehiculo v on v.id = o.vehiculo\n            join \n\t\t\t\tcliente c on c.id = o.cliente\n            join \n\t\t\t\ttaller t on t.id = o.taller\n            join \n\t\t\t\tmarca m on m.id = v.marca\n            join \n\t\t\t\tmodelo d on d.id = v.modelo\n            join \n\t\t\t\tzona z on z.id = o.zona\n            left outer join \n\t\t\t\tvw_orden_detalle od1 on od1.orden = o.id and od1.estado = 100\n            left outer join \n\t\t\t\tvw_orden_detalle od on od.orden = o.id and od.id = ($stmnt_od$)\n\t\t\tleft outer join \n\t\t\t\tvw_presupuesto p on p.orden = o.id and p.id = ($stmnt_p$)\n\t\t\tleft outer join estado e on e.id = od.estado", 
+		set @stmnt = replace(replace("\n\t\t\tselect \n\t\t\t\to.*, \n                m.marca as orden_marca, \n                d.modelo as orden_modelo, \n                t.nombre as orden_taller,\n                e.descripcion as orden_estado, \n                c.nombre as orden_cliente,\n                v.dominio as orden_dominio,\n                od.id as od_id,\n                od.estado as od_estado,\n                case p.estado\n\t\t\t\t\twhen 1 then concat(p.id, ' - Pendiente')\n                    when 2 then concat(p.id, ' - Aprobado')\n                    when 3 then concat(p.id, ' - Rechazado')\n\t\t\t\telse \n\t\t\t\t\t'Indefinido'\n\t\t\t\tend as presupuesto,\n                p.id as p_id,\n                p.p_tipo,\n                cast(od1.fecha as date) as fecha,\n                cast(od1.fecha as time) as hora,\n                ifnull(`fn_presupuesto_total_repuestos`(p.id), 0) + \n\t\t\t\t\tifnull(`fn_presupuesto_total_mano_obra`(p.id), 0) as total_ultimo_presupuesto,\n                ifnull(`fn_orden_total_repuestos`(o.id), 0) + \n\t\t\t\t\tifnull(`fn_orden_total_mano_obra`(o.id, if(@user_type = 2,2,1)), 0) as total_orden\n\t\t\tfrom \n\t\t\t\torden o\n\t\t\tjoin \n\t\t\t\tvehiculo v on v.id = o.vehiculo\n            join \n\t\t\t\tcliente c on c.id = o.cliente\n            join \n\t\t\t\ttaller t on t.id = o.taller\n            join \n\t\t\t\tmarca m on m.id = v.marca\n            join \n\t\t\t\tmodelo d on d.id = v.modelo\n            join \n\t\t\t\tzona z on z.id = o.zona\n            left outer join \n\t\t\t\tvw_orden_detalle od1 on od1.orden = o.id and od1.estado = 100\n            left outer join \n\t\t\t\tvw_orden_detalle od on od.orden = o.id and od.id = ($stmnt_od$)\n\t\t\tleft outer join \n\t\t\t\tvw_presupuesto p on p.orden = o.id and p.id = ($stmnt_p$)\n\t\t\tleft outer join estado e on e.id = od.estado", 
 		"$stmnt_p$", @stmnt_p), "$stmnt_od$", @stmnt_od);			
 	end if;
 
@@ -273,3 +220,227 @@ END//
 DELIMITER ;
 
 
+# Comparing `sistramc_data_orig`.`sp_orden_start-jobs` to `sistramc_data`.`sp_orden_start-jobs`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_trabajo_delete` to `sistramc_data`.`sp_orden_trabajo_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_trabajo_insert` to `sistramc_data`.`sp_orden_trabajo_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_trabajo_select` to `sistramc_data`.`sp_orden_trabajo_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_trabajo_select-list` to `sistramc_data`.`sp_orden_trabajo_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_trabajo_select-range` to `sistramc_data`.`sp_orden_trabajo_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_trabajo_update` to `sistramc_data`.`sp_orden_trabajo_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_update` to `sistramc_data`.`sp_orden_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_orden_update-status` to `sistramc_data`.`sp_orden_update-status`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_costo_repuestos` to `sistramc_data`.`sp_presupuesto_costo_repuestos`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_costo_repuestos_preview` to `sistramc_data`.`sp_presupuesto_costo_repuestos_preview`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_costo_repuestos_stored` to `sistramc_data`.`sp_presupuesto_costo_repuestos_stored`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_costo_trabajos` to `sistramc_data`.`sp_presupuesto_costo_trabajos`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_costo_trabajos_preview` to `sistramc_data`.`sp_presupuesto_costo_trabajos_preview`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_costo_trabajos_stored` to `sistramc_data`.`sp_presupuesto_costo_trabajos_stored`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_datos` to `sistramc_data`.`sp_presupuesto_datos`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_datos-preview` to `sistramc_data`.`sp_presupuesto_datos-preview`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_delete` to `sistramc_data`.`sp_presupuesto_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_descuento_zona` to `sistramc_data`.`sp_presupuesto_descuento_zona`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_insert` to `sistramc_data`.`sp_presupuesto_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_save` to `sistramc_data`.`sp_presupuesto_save`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_select` to `sistramc_data`.`sp_presupuesto_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_select-range` to `sistramc_data`.`sp_presupuesto_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_presupuesto_update-status` to `sistramc_data`.`sp_presupuesto_update-status`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_resumen_estados` to `sistramc_data`.`sp_resumen_estados`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_resumen_estados_1` to `sistramc_data`.`sp_resumen_estados_1`   [FAIL]
+# Transformation for --changes-for=server1:
+#
+
+DROP PROCEDURE IF EXISTS `sistramc_data_orig`.`sp_resumen_estados_1`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sistramc_data_orig`.`sp_resumen_estados_1` () CONTAINS SQL SQL SECURITY DEFINER BEGIN
+
+	declare v_finished int;
+    
+    declare v_estado int;
+    declare v_total int;
+
+	declare ord_nuevas int;
+    declare ord_reabiertas int;
+    declare ord_pendientes int;
+    declare ord_presupuestadas int;
+    declare ord_aprobadas int;
+    declare ord_iniciadas int;
+    declare ord_terminadas int;
+    declare ord_facturadas int;
+    declare ord_sin_facturar int;
+    
+    declare estados_cursor cursor for
+
+		(select d.nestado as estado, count(d.nestado) as total from (
+		select 
+			if (od.estado = 104, if (o.factura is null or trim(o.factura) = "", 1004, 2004), od.estado) as nestado
+		from orden o
+		join orden_detalle od on o.id = od.orden 
+			and od.id = (select max(od1.id) from orden_detalle od1 where od1.orden = o.id)
+		) d
+		group by d.nestado
+		order by 2 desc);
+        
+	declare continue handler
+		for not found set v_finished = 1;
+        
+	open estados_cursor;
+    
+    get_estado: loop
+	
+    fetch estados_cursor into v_estado, v_total;
+    
+    if v_finished = 1 then
+    leave get_estado;
+    end if;
+    
+    case v_estado
+		when 100 then set ord_nuevas = v_total;
+        when 101 then set ord_presupuestadas = v_total;
+        when 102 then set ord_aprobadas = v_total;
+        when 103 then set ord_iniciadas = v_total;
+        when 106 then set ord_reabiertas = v_total;
+        when 1004 then set ord_sin_facturar = v_total;
+        when 2004 then set ord_facturadas = v_total;
+	else begin end;
+	end case; 
+    
+    set ord_pendientes = ord_nuevas + ord_reabiertas;
+    set ord_terminadas = ord_facturadas + ord_sin_facturar;
+    
+    -- set ord_pendientes = v_estado;
+    -- set ord_facturadas = v_total;
+    
+    end loop get_estado;
+    
+    close estados_cursor;
+    
+    select 
+		ord_nuevas, ord_reabiertas, ord_pendientes,
+        ord_presupuestadas, ord_aprobadas, ord_iniciadas,
+        ord_terminadas, ord_facturadas, ord_sin_facturar;
+    
+END//
+DELIMITER ;
+
+
+# Comparing `sistramc_data_orig`.`sp_table_select-range` to `sistramc_data`.`sp_table_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_taller_baja` to `sistramc_data`.`sp_taller_baja`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_taller_delete` to `sistramc_data`.`sp_taller_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_taller_insert` to `sistramc_data`.`sp_taller_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_taller_select` to `sistramc_data`.`sp_taller_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_taller_select-list` to `sistramc_data`.`sp_taller_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_taller_select-range` to `sistramc_data`.`sp_taller_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_taller_update` to `sistramc_data`.`sp_taller_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_test_temp_table` to `sistramc_data`.`sp_test_temp_table`   [FAIL]
+# Transformation for --changes-for=server1:
+#
+
+DROP PROCEDURE IF EXISTS `sistramc_data_orig`.`sp_test_temp_table`;
+DELIMITER //
+CREATE DEFINER=`root`@`localhost` PROCEDURE `sistramc_data_orig`.`sp_test_temp_table` (
+	in ar varchar(400)
+) CONTAINS SQL SQL SECURITY DEFINER BEGIN
+  declare pos int;           -- Keeping track of the next item's position
+  declare item varchar(100); -- A single item of the input
+  declare breaker int;       -- Safeguard for while loop 
+
+  -- The string must end with the delimiter
+  if right(ar, 1) <> '.' then
+     set ar = concat(ar, ',');
+  end if;
+
+  DROP TABLE IF EXISTS tbl_search_tmp;
+  CREATE TEMPORARY TABLE tbl_search_tmp ( search varchar(100) );
+  set breaker = 0;
+
+  while (breaker < 2000) && (length(ar) > 1) do
+     -- Iterate looking for the delimiter, add rows to temporary table.
+     set breaker = breaker + 1;
+     set pos = INSTR(ar, ',');
+     set item = LEFT(ar, pos - 1);
+     set ar = substring(ar, pos + 1);
+     insert into tbl_search_tmp values(item);
+  end while;
+  
+  select * from tbl_search_tmp;
+  
+  drop table tbl_search_tmp;
+  
+END//
+DELIMITER ;
+
+
+# Comparing `sistramc_data_orig`.`sp_trabajo_select` to `sistramc_data`.`sp_trabajo_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_trabajo_select-list` to `sistramc_data`.`sp_trabajo_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_cliente_delete` to `sistramc_data`.`sp_usuario_cliente_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_cliente_insert` to `sistramc_data`.`sp_usuario_cliente_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_cliente_select` to `sistramc_data`.`sp_usuario_cliente_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_cliente_select-range` to `sistramc_data`.`sp_usuario_cliente_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_cliente_update` to `sistramc_data`.`sp_usuario_cliente_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_delete` to `sistramc_data`.`sp_usuario_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_insert` to `sistramc_data`.`sp_usuario_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_select` to `sistramc_data`.`sp_usuario_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_select-list` to `sistramc_data`.`sp_usuario_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_select-range` to `sistramc_data`.`sp_usuario_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_taller_delete` to `sistramc_data`.`sp_usuario_taller_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_taller_insert` to `sistramc_data`.`sp_usuario_taller_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_taller_select` to `sistramc_data`.`sp_usuario_taller_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_taller_select-range` to `sistramc_data`.`sp_usuario_taller_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_update` to `sistramc_data`.`sp_usuario_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_usuario_update_password` to `sistramc_data`.`sp_usuario_update_password`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_vehiculo_delete` to `sistramc_data`.`sp_vehiculo_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_vehiculo_insert` to `sistramc_data`.`sp_vehiculo_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_vehiculo_select` to `sistramc_data`.`sp_vehiculo_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_vehiculo_select-list` to `sistramc_data`.`sp_vehiculo_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_vehiculo_select-range` to `sistramc_data`.`sp_vehiculo_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_vehiculo_update` to `sistramc_data`.`sp_vehiculo_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_cliente_taller_delete` to `sistramc_data`.`sp_zona_cliente_taller_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_cliente_taller_insert` to `sistramc_data`.`sp_zona_cliente_taller_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_cliente_taller_select` to `sistramc_data`.`sp_zona_cliente_taller_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_cliente_taller_select-list` to `sistramc_data`.`sp_zona_cliente_taller_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_cliente_taller_select-range` to `sistramc_data`.`sp_zona_cliente_taller_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_cliente_taller_update` to `sistramc_data`.`sp_zona_cliente_taller_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_delete` to `sistramc_data`.`sp_zona_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_insert` to `sistramc_data`.`sp_zona_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_select` to `sistramc_data`.`sp_zona_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_select-list` to `sistramc_data`.`sp_zona_select-list`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_select-range` to `sistramc_data`.`sp_zona_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_trabajo_delete` to `sistramc_data`.`sp_zona_trabajo_delete`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_trabajo_insert` to `sistramc_data`.`sp_zona_trabajo_insert`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_trabajo_select` to `sistramc_data`.`sp_zona_trabajo_select`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_trabajo_select-range` to `sistramc_data`.`sp_zona_trabajo_select-range`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_trabajo_update` to `sistramc_data`.`sp_zona_trabajo_update`   [PASS]
+# Comparing `sistramc_data_orig`.`sp_zona_update` to `sistramc_data`.`sp_zona_update`   [PASS]
+# Comparing `sistramc_data_orig`.`cliente` to `sistramc_data`.`cliente`   [PASS]
+# Comparing `sistramc_data_orig`.`estado` to `sistramc_data`.`estado`   [PASS]
+# Comparing `sistramc_data_orig`.`marca` to `sistramc_data`.`marca`   [PASS]
+# Comparing `sistramc_data_orig`.`modelo` to `sistramc_data`.`modelo`   [PASS]
+# Comparing `sistramc_data_orig`.`novedad` to `sistramc_data`.`novedad`   [PASS]
+# Comparing `sistramc_data_orig`.`orden` to `sistramc_data`.`orden`   [PASS]
+# Comparing `sistramc_data_orig`.`orden_detalle` to `sistramc_data`.`orden_detalle`   [PASS]
+# Comparing `sistramc_data_orig`.`orden_novedad` to `sistramc_data`.`orden_novedad`   [PASS]
+# Comparing `sistramc_data_orig`.`orden_repuesto` to `sistramc_data`.`orden_repuesto`   [PASS]
+# Comparing `sistramc_data_orig`.`orden_trabajo` to `sistramc_data`.`orden_trabajo`   [PASS]
+# Comparing `sistramc_data_orig`.`presupuesto` to `sistramc_data`.`presupuesto`   [PASS]
+# Comparing `sistramc_data_orig`.`presupuesto_repuesto` to `sistramc_data`.`presupuesto_repuesto`   [PASS]
+# Comparing `sistramc_data_orig`.`presupuesto_trabajo` to `sistramc_data`.`presupuesto_trabajo`   [PASS]
+# Comparing `sistramc_data_orig`.`taller` to `sistramc_data`.`taller`   [PASS]
+# Comparing `sistramc_data_orig`.`trabajo` to `sistramc_data`.`trabajo`   [PASS]
+# Comparing `sistramc_data_orig`.`usuario` to `sistramc_data`.`usuario`   [PASS]
+# Comparing `sistramc_data_orig`.`usuario_cliente` to `sistramc_data`.`usuario_cliente`   [PASS]
+# Comparing `sistramc_data_orig`.`usuario_taller` to `sistramc_data`.`usuario_taller`   [PASS]
+# Comparing `sistramc_data_orig`.`vehiculo` to `sistramc_data`.`vehiculo`   [PASS]
+# Comparing `sistramc_data_orig`.`zona` to `sistramc_data`.`zona`   [PASS]
+# Comparing `sistramc_data_orig`.`zona_cliente_taller` to `sistramc_data`.`zona_cliente_taller`   [PASS]
+# Comparing `sistramc_data_orig`.`zona_trabajo` to `sistramc_data`.`zona_trabajo`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_modelo` to `sistramc_data`.`vw_modelo`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_novedad` to `sistramc_data`.`vw_novedad`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_novedad_no_orden` to `sistramc_data`.`vw_novedad_no_orden`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_orden_detalle` to `sistramc_data`.`vw_orden_detalle`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_orden_trabajo` to `sistramc_data`.`vw_orden_trabajo`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_presupuesto` to `sistramc_data`.`vw_presupuesto`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_usuario` to `sistramc_data`.`vw_usuario`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_vehiculo` to `sistramc_data`.`vw_vehiculo`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_zona_cliente_taller` to `sistramc_data`.`vw_zona_cliente_taller`   [PASS]
+# Comparing `sistramc_data_orig`.`vw_zona_trabajo` to `sistramc_data`.`vw_zona_trabajo`   [PASS]
+# Compare failed. One or more differences found.
