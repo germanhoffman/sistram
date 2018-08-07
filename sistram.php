@@ -55,6 +55,15 @@ function get_option_list() {
             $stmnt = sprintf("call `sp_%s_select-list`(%d, %d)", $table, $_SESSION["login_user_type"], $_SESSION["login_user_id"]);        
         }
     }
+    elseif ($table === "vehiculo") {
+        if ($filter_field && isset($filter_value)) {
+            $stmnt = sprintf("call `sp_%s_select-list`(%d, %d, %d)", $table, $_SESSION["login_user_type"], $_SESSION["login_user_id"],
+                    $filter_value);
+        }
+        else {
+            $stmnt = sprintf("call `sp_%s_select-list`(%d, %d)", $table, $_SESSION["login_user_type"], $_SESSION["login_user_id"]);
+        }
+    }
     elseif ($filter_field && isset($filter_value)) {
         $stmnt = sprintf("call `sp_%s_select-list`(%d)", $table, $filter_value);
     }

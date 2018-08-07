@@ -10,7 +10,7 @@ Number.prototype.round = function (places) {
 
 var get_total_orden = function(event, data) {
 	
-	var user_type = parseInt(session_data.login_user_type)
+	var user_type = parseInt(session_data.login_user_type);
 	var result = -1;
 	var orden_id;
 	
@@ -97,9 +97,9 @@ function show_table_orden() {
         openChildAsAccordion: true,
         actions: {
             listAction: mainPage + '?action=list&table=orden',
-            createAction: (user_type === 3)?mainPage + '?action=create&table=orden':null,
-            updateAction: (user_type === 3)?mainPage + '?action=update&table=orden':null,
-            deleteAction: (user_type === 3)?mainPage + '?action=delete&table=orden':null
+            createAction: (user_type === 2 || user_type === 3)?mainPage + '?action=create&table=orden':null,
+            updateAction: (user_type === 2 || user_type === 3)?mainPage + '?action=update&table=orden':null,
+            deleteAction: (user_type === 2 || user_type === 3)?mainPage + '?action=delete&table=orden':null
         },
         fields: {
             novedad: {
@@ -680,7 +680,10 @@ function show_table_orden() {
             	width: '10%',
             	visibility: 'fixed',
             	listClass: 'column_number',
-            	inputClass: 'glowing-border'
+            	inputClass: 'glowing-border',
+                create: (user_type === 3)?true:false,
+                edit: (user_type === 3)?true:false,
+                list: (user_type === 3)?true:false
             },
             total: {
             	create: false,
@@ -727,7 +730,8 @@ function show_table_orden() {
             },
             indice_ganancia: {
             	create: false,
-            	edit: false,            	
+            	edit: false, 
+                list: (user_type === 3)?true:false,
             	title: '&Iacute;ndice',
             	width: '10%',
             	visibility: 'fixed',
@@ -1127,8 +1131,9 @@ function show_table_orden() {
                 sorting: false,
                 edit: false,
                 create: false,
+                list: (user_type === 2 || user_type === 3)?true:false,
                 columnResizable: false,
-                type: (user_type === 3)?'':'hidden',
+                //type: (user_type === 3)?'':'hidden',
                 display: function (ordenData) {
                     
                     var $img = null;
